@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 11:33:00 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:36:30 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ class Client{
 	private:
 		int			_fd;
 		bool		_registered;
+		bool		_logedin;
 		std::string	_username;
+		std::string	_nickname;
 		
 	public:
 		Client();
@@ -31,11 +33,15 @@ class Client{
 	/*GETTERS*/
 	int			getFd();
 	bool		getRegistered();
+	bool		getLogedIn();
 	std::string	getNickName();
+	std::string	getUserName();
 	
 
 	/*SETTERS*/
+	void	setNickName(std::string &nickname);
 	void	setRegistered(bool value);
+	void	setLogedIn(bool value);
 };
 
 #endif

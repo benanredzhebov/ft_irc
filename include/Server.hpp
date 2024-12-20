@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 10:28:43 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:34:45 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ class Server {
 		bool	byPassForBot(std::string cmd, int fd);
 		bool	notRegistered(int fd);
 		bool	nickNameInUse(std::string &nickname);
-		void	is_validNickname(std::string &nickname);
+		bool	is_validNickname(std::string &nickname);
 		void	client_authen(int fd, std::string pass);
 
 		/*JOIN CMD*/
