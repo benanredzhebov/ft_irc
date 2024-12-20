@@ -6,7 +6,7 @@
 #    By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/15 09:58:47 by beredzhe          #+#    #+#              #
-#    Updated: 2024/12/15 09:58:50 by beredzhe         ###   ########.fr        #
+#    Updated: 2024/12/20 10:26:02 by beredzhe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,9 @@ CFLAGS	=	-Wall -Wextra - Werror -std=c++98
 all: $(NAME)
 
 $(NAME) = $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o %.cpp
+%.o %.cpp include/Server.hpp include/Client.hpp include/Channel.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

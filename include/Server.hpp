@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/19 17:30:48 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:28:43 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@
 #include <fstream>
 #include <ctime>
 
-#include "Client.hpp"
-#include "Channel.hpp"
-#include "replies.hpp"
+#include "./Client.hpp"
+#include "./Channel.hpp"
+#include "./replies.hpp"
 
 
 #define RED "\e[1;31m"
@@ -41,7 +41,7 @@
 #define YEL "\e[1;33m"
 
 class Client;
-Class Channel;
+class Channel;
 
 class Server {
 	private:
@@ -155,6 +155,5 @@ class Server {
 		int			getpos(std::string &cmd);
 		
 };
-
 
 #endif
