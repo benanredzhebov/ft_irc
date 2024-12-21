@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 15:36:30 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/21 09:33:04 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Client{
 
 	/*SETTERS*/
 	void	setNickName(std::string &nickname);
+	void	setUsername(std::string& username);
 	void	setRegistered(bool value);
 	void	setLogedIn(bool value);
 };

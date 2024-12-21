@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 14:36:54 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/21 09:53:28 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,18 @@ Channel *Server::getChannel(std::string name) {
 			return &_channels[i];
 	}
 	return NULL;
+}
+
+/*PARSING METHODS*/
+
+/*splits a given command string into a vector of strings based on whitespace.*/
+std::vector<std::string> Server::split_cmd(std::string &cmd) {
+	std::vector<std::string>	vec;
+	std::istringstream	stm(cmd);
+	std::string	token;
+	while (stm >> token) { // Reads tokens from the stream stm, into the string token using >> operator
+		vec.push_back(token); // Adds each token to the vectors
+		token.clear();
+	}
+	return vec;
 }

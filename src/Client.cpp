@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 15:37:23 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/21 09:34:24 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ std::string	Client::getUserName() {return this->_username;}
 void		Client::setRegistered(bool value) {_registered = value;}
 
 void		Client::setNickName(std::string &nickname) {this->_nickname = nickname;}
+
+void		Client::setUsername(std::string &username) {this->_username = username;}
 
 void		Client::setLogedIn(bool value) {this->_logedin = value;}

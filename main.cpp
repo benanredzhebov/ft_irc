@@ -6,9 +6,11 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:33:37 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/19 16:36:26 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/21 10:18:55 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "./include/Server.hpp"
 
 int main(int ac, char **av) {
 	Server ser;
