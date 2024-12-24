@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/21 09:34:24 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/22 12:16:33 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,3 +28,5 @@ void		Client::setNickName(std::string &nickname) {this->_nickname = nickname;}
 void		Client::setUsername(std::string &username) {this->_username = username;}
 
 void		Client::setLogedIn(bool value) {this->_logedin = value;}
+
+void		Client::setClientFd(int fd) {_fd = fd;}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/20 15:33:22 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/23 22:34:15 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,3 +27,12 @@
 #define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + " :You may not reregister !" + CRLF )
 #define ERR_INCORPASS(nickname) (": 464 " + nickname + " :Password incorrect !" + CRLF )
 
+
+#define USER_SET " 😎😎 CLIENT USERNAME SET 😎😎\n"
+#define NICK_SET " 😎😎 CLIENT NICKNAME SET 😎😎\n"
+#define PASSWORD_AUTH_FAILED " PASSWORD FAILED BYE 👋\n"
+
+#define E_PASSWORD "🚨🚨 ENTER PASSWORD OR GET KICKED 🚨🚨\n"
+#define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n"
+#define USERNAME "🚨🚨 ENTER USERNAME 🚨🚨\n"
+#define NICKNAME "🚨🚨 ENTER NICKNAME 🚨🚨\n"
