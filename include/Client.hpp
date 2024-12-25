@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/23 21:55:06 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 01:00:54 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,22 @@
 
 #include "./Server.hpp"
 
-class Client{
+enum ClientState {
+	WAITING_FOR_PASSWORD,
+	WAITING_FOR_NICKNAME,
+	WAITING_FOR_USERNAME,
+	AUTHENTICATED
+};
+
+class Client {
 	private:
 		int			_fd;
+		int			passwordTrials;
 		bool		_registered;
 		bool		_logedin;
 		std::string	_username;
 		std::string	_nickname;
+    	ClientState	state;
 		
 	public:
 		// Client();
@@ -29,10 +38,15 @@ class Client{
 		// ~Client();
 		// Client(const Client &other);
 		// Client &operator=(const Client &other);
-    Client() : _fd(-1), _registered(false), _logedin(false) {}
+    Client() : _fd(-1), _registered(false), _logedin(false), passwordTrials(3), state(WAITING_FOR_PASSWORD) {}
     ~Client(){
 		std::cout << "calleed" << std::endl;
 	}
+
+	void decrementPasswordTrials() { passwordTrials--; }
+    int getPasswordTrials() const { return passwordTrials; }
+    void setState(ClientState s) { state = s; }
+    ClientState getState() const { return state; }
 
     // Copy constructor
     Client(const Client& other) 

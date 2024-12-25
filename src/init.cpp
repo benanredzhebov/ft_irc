@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/23 23:33:50 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 13:31:39 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int Server::_runServerUtils(int x, int fd) {
 // creating channel, joining channel, prvmsg, 
 //also need to hook the signal 
 int Server::_run_server() {
+	int			clientFD;
 	epfd = epoll_create1(0);
-	Client		client;
 
 	if (!_setServerSocket())
 		return (0);
@@ -104,18 +104,27 @@ int Server::_run_server() {
 			continue;
 		for (int i = 0; i < epoll_waitfd; i++) {
 			if (_fds[i].data.fd == _server_fdsocket) {
-				client.setClientFd(_serverAcceptIncoming());
-				if (client.getFd() < 0){
-					return (close_fds(client.getFd()), 0);
+				clientFD = _serverAcceptIncoming();
+				if (clientFD < 0){
+					continue ;
 				}
-				if (_runServerUtils(client_authen(client.getFd()), client.getFd()))
+				client_event = initEpollEvant(EPOLLIN, clientFD);
+				if (epoll_ctl(epfd, EPOLL_CTL_ADD, clientFD, &client_event) == -1) {
+					close_fds(clientFD);
+            		std::cerr << "Failed to add client to epoll\n";
+            		continue;
+				}
+				Client newclient;
+				newclient.setClientFd(clientFD);
+				_clients.push_back(newclient);
+			}
+			else {
+				clientFD = _fds[i].data.fd;
+				Client *cli = getClient(clientFD);
+				if (_runServerUtils(client_authen(clientFD), clientFD))
 					continue ;
 				client.setRegistered(true);
-				_clients.push_back(client);
 				clientInfoSave(client.getFd());
-				client_event = initEpollEvant(EPOLLIN,client.getFd());
-				if (epoll_ctl(epfd, EPOLL_CTL_ADD, client.getFd(), &client_event) == -1)
-					return (0);
 			}
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authenti.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/23 21:55:48 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 13:55:46 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,49 +17,34 @@ handles client authentication based on a command received from the client
 If the command is valid and the password matches, the client is marked as registered*/
 
 int	Server::client_authen(int fd) {
-	int			count = 3;
-	Client		*cli;
-
-	cli = getClient(fd);
-	if (cli != NULL) {
-		std::cout <<"most probably client has been registed\n\n" << std::endl;
+	sendResponse(E_PASSWORD, fd);
+	if (!recievePasswordVerify(fd)){
 		return (0);
 	}
-	while (count > 0){
-		sendResponse(E_PASSWORD, fd);
-		if (!recievePasswordVerify(fd)){
-			count--;
-			continue;
-		}
-		else {
-			return (1);
-		}
-	}
-	return (-1);
-	//most likely not yet pushed so i should find a way to check and then push.
+	return (1);
 }
 
-int	Server::clientInfoSave(int fd) {
-	Client		*cli;
-	std::string	userName;
+int Sever::clientNickName(int fd) {
 	std::string	nickName;
 
-	cli = getClient(fd);
-	if (!cli) {
-		std::cout << "defff an issue \n" << std::endl;
-	}
-	while (1) {
-		sendResponse(NICKNAME, fd);
-		nickName = receiveSetNameUname(fd);
-		if (set_username(nickName, fd))
-			break ;
-	}
-	while (1) {
-		sendResponse(USERNAME, fd);
-		userName = receiveSetNameUname(fd);
-		if (set_nickname(userName, fd))
-			break ;
-	}
+	sendResponse(NICKNAME, fd);
+	nickName = receiveSetNameUname(fd);
+	if (set_username(nickName, fd))
+		return (1);
+	return (0);
+}
+
+int Sever::clientUserName(int fd) {
+	std::string	userName;
+
+	sendResponse(USERNAME, fd);
+	userName = receiveSetNameUname(fd);
+	if (set_nickname(userName, fd))
+		return (1);
+	return (0);
+}
+
+int	Server::confirmClientInfo(int fd) {
 	if(cli && cli->getRegistered() && !cli->getUserName().empty() && !cli->getNickName().empty() && !cli->getLogedIn())
 	{
 		cli->setLogedIn(true);
