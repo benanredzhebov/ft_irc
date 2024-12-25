@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/21 10:39:46 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/25 08:46:40 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ class Server {
 		void	accept_new_client(); // Accept a new client connection
 		void	set_server_socket(); // Set up the server socket
 		void	receiveNewData(int fd); // Receive new data from a client
+		int		_run_server();
 
 		/*PARSING METHODS*/
 		std::vector<std::string>	split_recivedBuffer(std::string str); // Split received buffer into commands
