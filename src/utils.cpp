@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/25 13:56:24 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 23:50:42 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,42 +56,33 @@ int	Server::resizeFds() {
 void Server::handleClientInput(Client* client) {
     switch (client->getState()) {
         case WAITING_FOR_PASSWORD: {
-			if (client_authen) {
+			if (clientPasswordVerify(client))
 				client->setState(WAITING_FOR_NICKNAME);
-			} else {
+			else {
 				client->decrementPasswordTrials();
 				if (client->getPasswordTrials() <= 0) {
-				    epoll_ctl(epfd, EPOLL_CTL_DEL, client->getFd(), 0);
-				   	removeClient(client->getFd());
-				} else {
-				    sendResponse("Incorrect password. Try again:", client->getFd());
-				}
-			}
-            break;
-        }
-        case WAITING_FOR_NICKNAME: {
-			if (clientNickName(client->getFd())) {
-				client->setState(WAITING_FOR_USERNAME);
-			} else {
-				sendResponse("Invalid nickname. Try again:", client->getFd());
+					epoll_ctl(epfd, EPOLL_CTL_DEL, client->getFd(), 0);
+					removeClient(client->getFd());
+				} 
 			}
 			break;
-        }
-
+		}
+		case WAITING_FOR_NICKNAME: {
+			if (clientNickName(client)) {
+				client->setState(WAITING_FOR_USERNAME);
+			}
+			break;
+		}
         case WAITING_FOR_USERNAME: {
-            if (clientUserName(client->getFd())) {
-                // client->setState(AUTHENTICATED);
-                client->setRegistered(true);
-				confirmClientInfo(client->getFd());
-            } else {
-                sendResponse("Invalid username. Try again:", client->getFd());
-            }
+            if (clientUserName(client)) {
+                client->setState(AUTHENTICATED);
+				confirmClientInfo(client);
+            } 
             break;
         }
-
-        case AUTHENTICATED: {
-            processClientCommand(client, buffer);
-            break;
-        }
+        // case AUTHENTICATED: {
+        //     processClientCommand(client, buffer);
+        //     break;
+        // }
     }
 }

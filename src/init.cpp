@@ -3,131 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   init.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/25 13:31:39 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:31:50 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-int Server::_creatingServerSocketFd(){
-	_server_fdsocket = socket(AF_INET6, SOCK_STREAM, 0);
-	if (_server_fdsocket < 0 ){
-		std::cout << "socket creation faliled\n" << std::endl;
-		return (0);
-	}
-	return (1);
-}
-
-int Server::_serverReservePortandIpBind(){
-	int opt = 0;
-	struct sockaddr_in6	address;
-
-	memset(&address, 0, sizeof(address));
-	address.sin6_family = AF_INET6;
-	address.sin6_port = htons(_port);
-	address.sin6_addr = in6addr_any;
-	if (setsockopt(_server_fdsocket, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt)) < 0) {
-		std::cerr << "Failed to set IPV6_V6ONLY option: " << strerror(errno) << std::endl;
-		return (0);
-    }
-	if (bind(_server_fdsocket, (const struct sockaddr *)&address, sizeof(address)) < 0){
-		return (std::cout << "binding faliled\n" << std::endl, 0);
-	}
-	return (1);
-
-}
-
-int Server::_serverListens() {
-	if (listen(_server_fdsocket, SOMAXCONN) < 0) {
-		std::cout << "lsiten faliled\n" << std::endl;
-		return (0);
-	}
-	return (1);
-}
-
-int Server::_createBindListen(){
-	if (!_creatingServerSocketFd())
-		return (0);
-	if (!_serverReservePortandIpBind())
-		return (0);
-	if (!_serverListens())
-		return (0);
-	std::cout << "\ncreating, binding and listening successfully\n" << std::endl;
-	return (1);
-}
-
-int	Server::_serverAcceptIncoming(){
-	int					clientFd;
-	socklen_t			clientAddrLen;
-	struct sockaddr_in6	clientAddr;
-
-	clientAddrLen = sizeof(clientAddr);
-	clientFd = accept(_server_fdsocket, (struct sockaddr *) &clientAddr, &clientAddrLen);
-	if (clientFd  < 0) {
-		std::cerr << "accepting client faliled\n" << std::endl;
-		close_fds(clientFd);
-		return (-1);
-	}
-	return (clientFd);
-}
-
-int Server::_runServerUtils(int x, int fd) {
-	if (x == 0){
-		std::cerr << "\fd already existfailed\n" << std::endl;
-		return (1) ;
-	}
-	else if (x == -1){
-		removeClient(fd);
-		return (1) ;
-	}
-	return (0);
-}
-
-//currently we can connect with all clients and then authenticate. user and nick.
-// next is to breakdown what ever clients send and then we can use that to know what next to do
-// creating channel, joining channel, prvmsg, 
-//also need to hook the signal 
-int Server::_run_server() {
-	int			clientFD;
-	epfd = epoll_create1(0);
-
-	if (!_setServerSocket())
-		return (0);
-	while (1) {
-		epoll_waitfd = epoll_wait(epfd, _fds.data(), _fds.size(), -1);
-		if (epoll_waitfd < 0)
-			break ;
-		if (resizeFds())
-			continue;
-		for (int i = 0; i < epoll_waitfd; i++) {
-			if (_fds[i].data.fd == _server_fdsocket) {
-				clientFD = _serverAcceptIncoming();
-				if (clientFD < 0){
-					continue ;
-				}
-				client_event = initEpollEvant(EPOLLIN, clientFD);
-				if (epoll_ctl(epfd, EPOLL_CTL_ADD, clientFD, &client_event) == -1) {
-					close_fds(clientFD);
-            		std::cerr << "Failed to add client to epoll\n";
-            		continue;
-				}
-				Client newclient;
-				newclient.setClientFd(clientFD);
-				_clients.push_back(newclient);
-			}
-			else {
-				clientFD = _fds[i].data.fd;
-				Client *cli = getClient(clientFD);
-				if (_runServerUtils(client_authen(clientFD), clientFD))
-					continue ;
-				client.setRegistered(true);
-				clientInfoSave(client.getFd());
-			}
+Client *Server::getClient(int fd) {
+	for (size_t i = 0; i < this->_clients.size(); i++) {
+		if (this->_clients[i].getFd() == fd){
+			return &this->_clients[i];
 		}
 	}
-	close_fds(_server_fdsocket);
-	return (1);
+	return (NULL);
+}
+
+void Server::sendResponse(std::string response, int fd) {
+	if (send(fd, response.c_str(), response.size(), 0) == -1)
+		std::cerr << "Response send() failed" << std::endl;
+}
+
+bool	Server::is_validNickname(std::string &nickname) {
+	if (!nickname.empty() && (nickname[0] == '&' || nickname[0] == '#' || nickname[0] == ':'))
+		return false;
+	for (size_t i = 1; i < nickname.size(); i++) {
+		if (!std::isalnum(nickname[i]) && nickname[i] != '_')
+			return false;
+	}
+	return true;
+}
+
+bool	Server::is_validUserName(std::string &username) {
+	if (!username.empty() && (username[0] == '&' || username[0] == '#' || username[0] == ':'))
+		return false;
+	for (size_t i = 1; i < username.size(); i++) {
+		if (!std::isalnum(username[i]) && username[i] != '_')
+			return false;
+	}
+	return true;
+}
+
+bool	Server::nickNameInUse(std::string &nickname) {
+	for (size_t i = 0; i < this->_clients.size(); i++) {
+		if (this->_clients[i].getNickName() == nickname)
+			return true;
+	}
+	return false;
+}
+
+bool	Server::userNameInUse(std::string &username) {
+	for (size_t i = 0; i < this->_clients.size(); i++) {
+		if (this->_clients[i].getUserName() == username)
+			return true;
+	}
+	return false;
 }

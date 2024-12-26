@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 13:40:58 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 21:35:45 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
+
+#include <cctype>
 
 #include <iostream>
 #include <vector>
@@ -96,9 +98,7 @@ class Server {
 		// void	addChannel(Channel newChannel); // Add a new channel
 		
 		
-		int	set_username(std::string username, int fd); // Set username for a client
-		int	set_nickname(std::string cmd, int fd); // Set nickname for a client
-
+		
 		/*REMOVE METHODS*/
 		void	removeClient(int fd); // Remove a client by file descriptor
 		
@@ -147,11 +147,19 @@ class Server {
 
 
 		/*AUTHENTIFICATION METHODS*/
+		int							clientPasswordVerify(Client *cli);
+		void						handleClientInput(Client* client);
+		int							clientNickName(Client *cli);
+		int							clientUserName(Client *cli);
+		int							set_nickname(std::string cmd, Client *cli); // Set nickname for a client
+		int							set_username(std::vector<std::string> splited_cmd, Client *cli); // Set username for a client
+		int							confirmClientInfo(Client *cli);
+		
+		
 		bool			nickNameInUse(std::string &nickname); // Check if nickname is in use
 		bool			userNameInUse(std::string &username); // Check if nickname is in use
 		bool			is_validNickname(std::string &nickname); // Check if nickname is valid
 		bool			is_validUserName(std::string &username); // Check if nickname is valid
-		int				client_authen(int fd); // Authenticate client password
 		int				clientInfoSave(int fd); // Authenticate client username && password
 		std::string		receiveSetNameUname(int _client_fdsocket);
 		
@@ -220,5 +228,10 @@ class Server {
 		int			getpos(std::string &cmd); // Get position from command
 		
 };
+
+
+std::vector<std::string>	spliting_cmd(Client *cli);
+std::string					toUpper(const std::string& str);
+std::string					trim(const std::string& str);
 
 #endif

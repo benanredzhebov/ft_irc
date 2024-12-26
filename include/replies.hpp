@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 13:33:21 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 23:55:06 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,23 @@
 #define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + " :Erroneus nickname" + CRLF) //a nickname with errors in it
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + " :Nickname is already in use" + CRLF)
 #define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + " :You have not registered!" + CRLF)
-#define ERR_NOTENOUGHPARAM(nickname) (": 461 " + nickname + " :Not enough parameters." + CRLF)
-#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + " :You may not reregister !" + CRLF )
-#define ERR_INCORPASS(nickname) (": 464 " + nickname + " :Password incorrect !" + CRLF )
+
+
+
+
+#define ERR_NOTENOUGHPARAM(nickname) (": 461 \n\t\t" + nickname + " :Not enough parameters." + CRLF)
+#define ERR_INCORPASS(password) (": 464 \n\t\t" + password + " :Password incorrect !" + CRLF )
+#define ERR_NEEDMOREPARAMS(command) (": 461 \n\t\t" + command + " :Not enough parameters" + CRLF )
+#define ERR_ALREADYREGISTERED(nickname) (": 462 \n\t\t" + nickname + " :You may not reregister !" + CRLF )
+#define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n ...continue with nick and username\n"
+#define PASSWORD_AUTH_FAILED " PASSWORD FAILED BYE 👋\n"
+#define ERR_NICKNAME_NEEDED(command) (": m420 \n\t\t" + command + ":pass NICK first" + CRLF)
+
 
 
 #define USER_SET " 😎😎 CLIENT USERNAME SET 😎😎\n"
 #define NICK_SET " 😎😎 CLIENT NICKNAME SET 😎😎\n"
-#define PASSWORD_AUTH_FAILED " PASSWORD FAILED BYE 👋\n"
 
-#define E_PASSWORD "🚨🚨 ENTER PASSWORD OR GET KICKED 🚨🚨\n"
-#define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n"
+
 #define USERNAME "🚨🚨 ENTER USERNAME 🚨🚨\n"
 #define NICKNAME "🚨🚨 ENTER NICKNAME 🚨🚨\n"

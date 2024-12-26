@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 01:00:54 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:13:51 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ enum ClientState {
 class Client {
 	private:
 		int			_fd;
-		int			passwordTrials;
+		int			_passwordTrials;
 		bool		_registered;
 		bool		_logedin;
 		std::string	_username;
@@ -38,13 +38,13 @@ class Client {
 		// ~Client();
 		// Client(const Client &other);
 		// Client &operator=(const Client &other);
-    Client() : _fd(-1), _registered(false), _logedin(false), passwordTrials(3), state(WAITING_FOR_PASSWORD) {}
+    Client() : _fd(-1), _registered(false), _logedin(false), _passwordTrials(3), state(WAITING_FOR_PASSWORD) {}
     ~Client(){
 		std::cout << "calleed" << std::endl;
 	}
 
-	void decrementPasswordTrials() { passwordTrials--; }
-    int getPasswordTrials() const { return passwordTrials; }
+	void decrementPasswordTrials() { _passwordTrials--; }
+    int getPasswordTrials() const { return _passwordTrials; }
     void setState(ClientState s) { state = s; }
     ClientState getState() const { return state; }
 
@@ -54,6 +54,7 @@ class Client {
           _registered(other._registered),
           _logedin(other._logedin),
           _nickname(other._nickname),
+		  _passwordTrials(other._passwordTrials),
           _username(other._username) {}
 
     // Copy assignment operator
@@ -64,6 +65,7 @@ class Client {
             _logedin = other._logedin;
             _nickname = other._nickname;
             _username = other._username;
+			_passwordTrials = other._passwordTrials;
         }
         return *this;
     }
