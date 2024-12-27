@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 21:35:45 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:39:23 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class Server {
 		// struct sockaddr_in			_cliadd; // Client address structure
 		// struct pollfd				_new_cli; // Pollfd structure for a new client
 	
-	
+		// std::vector<Channel>			_channels;
 		int									_port; // Port number the server listens on
 		int									_server_fdsocket; // File descriptor for the server socket
 		std::string							_password; // Password for server authentication
@@ -83,9 +83,9 @@ class Server {
 		
 		Client		*getClient(int fd); // Get client by file descriptor
 		Client		*getClientNick(std::string nickname); // Get client by nickname
-		
-		
 		// Channel		*getChannel(std::string name); // Get channel by name
+		
+		
 
 		/*SETTERS*/
 		void	setFd(int server_fdsocket); // Set server file descriptor
@@ -147,10 +147,10 @@ class Server {
 
 
 		/*AUTHENTIFICATION METHODS*/
-		int							clientPasswordVerify(Client *cli);
+		int							clientPasswordVerify(Client *cli, std::vector<std::string> splited_cmd);
 		void						handleClientInput(Client* client);
-		int							clientNickName(Client *cli);
-		int							clientUserName(Client *cli);
+		int							clientNickName(Client *cli, std::vector<std::string> splited_cmd);
+		int							clientUserName(Client *cli, std::vector<std::string> splited_cmd);
 		int							set_nickname(std::string cmd, Client *cli); // Set nickname for a client
 		int							set_username(std::vector<std::string> splited_cmd, Client *cli); // Set username for a client
 		int							confirmClientInfo(Client *cli);
@@ -175,8 +175,11 @@ class Server {
 
 
 		/*JOIN CMD*/
-		void	JOIN(std::string cmd, int fd); // Handle JOIN command
-		int		splitJoin(std::vector<std::pair<std::string, std::string> > &token, std::string cmd, int fd); // Split JOIN command
+		int		JOIN(std::vector<std::string> splited_cmd, Client *client);
+		int		splitJoin(std::vector<std::pair<std::string, std::string> > &token, std::vector<std::string> splited_cmd);
+
+
+		
 		void	existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd); // Handle existing channel
 		void	notExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd); // Handle non-existing channel
 		int		searchForClients(std::string nickname); // Search for clients by nickname
@@ -193,7 +196,8 @@ class Server {
 		std::string splitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd); // Split KICK command
 
 		/*PRIVMSG CMD*/
-		void	PRIVMSG(std::string cmd, int fd); // Handle PRIVMSG command
+		int		PRIVMSG(std::vector<std::string> splited_cmd, Client *client);
+		
 		void	checkForChannels_Clients(std::vector<std::string> &tmp, int fd); // Check for channels and clients
 
 		/*QUIT CMD*/

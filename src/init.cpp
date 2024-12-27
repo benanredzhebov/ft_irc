@@ -6,19 +6,27 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/25 22:31:50 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:42:22 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-Client *Server::getClient(int fd) {
+Client	*Server::getClient(int fd) {
 	for (size_t i = 0; i < this->_clients.size(); i++) {
 		if (this->_clients[i].getFd() == fd){
 			return &this->_clients[i];
 		}
 	}
 	return (NULL);
+}
+
+Client	*Server::getClientNick(std::string nickname) {
+	for (size_t i = 0; i < this->_clients.size(); i++) {
+		if (this->_clients[i].getNickName() == nickname)
+			return &this->_clients[i];
+	}
+	return (NULL);	
 }
 
 void Server::sendResponse(std::string response, int fd) {

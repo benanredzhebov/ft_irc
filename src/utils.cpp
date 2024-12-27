@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/25 23:50:42 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:12:23 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,35 +54,39 @@ int	Server::resizeFds() {
 }
 
 void Server::handleClientInput(Client* client) {
-    switch (client->getState()) {
-        case WAITING_FOR_PASSWORD: {
-			if (clientPasswordVerify(client))
-				client->setState(WAITING_FOR_NICKNAME);
-			else {
-				client->decrementPasswordTrials();
-				if (client->getPasswordTrials() <= 0) {
-					epoll_ctl(epfd, EPOLL_CTL_DEL, client->getFd(), 0);
-					removeClient(client->getFd());
-				} 
-			}
-			break;
+	std::vector<std::string>	splited_cmd;
+	splited_cmd = spliting_cmd(client);
+
+	if (splited_cmd.empty()) {
+		splited_cmd[0] = "*";
+		sendResponse(ERR_NEEDMOREPARAMS(splited_cmd[0]), client->getFd());
+		return ;
+	}
+	if(splited_cmd[0] == "PASS")
+		clientPasswordVerify(client, splited_cmd);
+	else if (splited_cmd[0] == "NICK")
+		clientNickName(client, splited_cmd);
+	else if (splited_cmd[0] == "USER"){
+		clientUserName(client, splited_cmd);
+	}
+	else if (client->getLogedIn()) {
+		if(splited_cmd[0] == "JOIN"){
+			JOIN(splited_cmd, client);
 		}
-		case WAITING_FOR_NICKNAME: {
-			if (clientNickName(client)) {
-				client->setState(WAITING_FOR_USERNAME);
-			}
-			break;
+		else if(splited_cmd[0] == "PRIVMSG"){
+			PRIVMSG(splited_cmd, client);
 		}
-        case WAITING_FOR_USERNAME: {
-            if (clientUserName(client)) {
-                client->setState(AUTHENTICATED);
-				confirmClientInfo(client);
-            } 
-            break;
-        }
-        // case AUTHENTICATED: {
-        //     processClientCommand(client, buffer);
-        //     break;
-        // }
-    }
+		// else if(splited_cmd[0] == "INVITE"){
+			
+		// }
+		// else if(splited_cmd[0] == "KICK"){
+			
+		// }
+		// else if(splited_cmd[0] == "TOPIC"){
+			
+		// }
+		// else if(splited_cmd[0] == "MODE"){
+			
+		// }
+	}
 }

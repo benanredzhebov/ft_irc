@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 22:13:51 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 02:59:38 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ class Client {
 		std::string	_username;
 		std::string	_nickname;
     	ClientState	state;
+		// std::string	getHostname(); // Get the hostname
+
+		bool		_nickbool;
 		
 	public:
 		// Client();
@@ -38,10 +41,12 @@ class Client {
 		// ~Client();
 		// Client(const Client &other);
 		// Client &operator=(const Client &other);
-    Client() : _fd(-1), _registered(false), _logedin(false), _passwordTrials(3), state(WAITING_FOR_PASSWORD) {}
+    Client() : _fd(-1), _registered(false), _nickbool(false), _logedin(false), _passwordTrials(3), state(WAITING_FOR_PASSWORD) {}
     ~Client(){
 		std::cout << "calleed" << std::endl;
 	}
+std::string	getHostname(); // Get the hostname
+
 
 	void decrementPasswordTrials() { _passwordTrials--; }
     int getPasswordTrials() const { return _passwordTrials; }
@@ -53,6 +58,7 @@ class Client {
         : _fd(other._fd),
           _registered(other._registered),
           _logedin(other._logedin),
+		  _nickbool(other._nickbool),
           _nickname(other._nickname),
 		  _passwordTrials(other._passwordTrials),
           _username(other._username) {}
@@ -64,6 +70,7 @@ class Client {
             _registered = other._registered;
             _logedin = other._logedin;
             _nickname = other._nickname;
+			_nickbool = other._nickbool;
             _username = other._username;
 			_passwordTrials = other._passwordTrials;
         }
@@ -77,6 +84,7 @@ class Client {
 	bool		getLogedIn();
 	std::string	getNickName();
 	std::string	getUserName();
+	bool		nickGet();
 	
 
 	/*SETTERS*/
@@ -84,7 +92,8 @@ class Client {
 	void	setUsername(std::string& username);
 	void	setRegistered(bool value);
 	void	setLogedIn(bool value);
-
+	
+	void		nickSet(bool value);
 	void	setClientFd(int fd);
 };
 
