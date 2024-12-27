@@ -74,4 +74,4 @@ class Channel {
 		void		sendTo_all(std::string rpl1, int fd); // Send message to all clients except one
 };
 
-#endif;
+#endif

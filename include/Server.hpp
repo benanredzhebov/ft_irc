@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 13:39:23 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:20:40 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define SERVER_HPP
 
 #include <cctype>
-
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -34,7 +34,7 @@
 #include <ctime>
 
 #include "./Client.hpp"
-// #include "./Channel.hpp"
+#include "./Channel.hpp"
 #include "./replies.hpp"
 
 
@@ -42,9 +42,11 @@
 #define WHI "\e[0;37m"
 #define GRE "\e[1;32m"
 #define YEL "\e[1;33m"
+#define DEBUG 0
+
 
 class Client;
-// class Channel;
+class Channel;
 
 class Server {
 	private:
@@ -55,11 +57,11 @@ class Server {
 		// struct sockaddr_in			_cliadd; // Client address structure
 		// struct pollfd				_new_cli; // Pollfd structure for a new client
 	
-		// std::vector<Channel>			_channels;
+		std::vector<Channel>				_channels;
+		std::vector<Client>					_clients; // List of connected clients
 		int									_port; // Port number the server listens on
 		int									_server_fdsocket; // File descriptor for the server socket
 		std::string							_password; // Password for server authentication
-		std::vector<Client>					_clients; // List of connected clients
 		int									epfd;	
 		std::vector<struct epoll_event>		_fds;
 		struct epoll_event 					server_event_gotten[100];
@@ -178,10 +180,10 @@ class Server {
 		int		JOIN(std::vector<std::string> splited_cmd, Client *client);
 		int		splitJoin(std::vector<std::pair<std::string, std::string> > &token, std::vector<std::string> splited_cmd);
 
+		void	newChannelCreate(std::string chName, std::string chPass, Client *cli); // Handle non-existing channel
 
 		
 		void	existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd); // Handle existing channel
-		void	notExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd); // Handle non-existing channel
 		int		searchForClients(std::string nickname); // Search for clients by nickname
 
 

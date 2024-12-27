@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/26 19:05:48 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:29:07 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	Channel::setTime(std::string time) {this->_time_creation = time;}
 void	Channel::set_topicRestriction(bool value) {this->_topic_restriction = value;}
 void	Channel::setModeAtindex(size_t index, bool mode) {_modes[index].second = mode;}
 // Sets the creation time of the channel by converting the current time to a string and storing it in the _created_at
+
+
 void	Channel::set_createiontime() {
 	std::time_t	_time = std::time(NULL); // returns the current calendar time
 	std::ostringstream	oss;

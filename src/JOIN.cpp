@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 16:14:35 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:25:27 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,46 @@
 
 /*It parses the JOIN command to extract channel names and passwords
 RFC 2812 JOIN <channel>{,<channel>} [<key>{,<key>}] */
-int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, std::vector<std::string> splited_cmd)
-{ //maybe we should for key for invalid or not . you decide
-	std::vector<std::string> channels;
-	std::vector<std::string> passwords;
-	std::string channelStr, passwordStr;
 
-	for (int i = 1; i < splited_cmd.size(); i++) {
-		channelStr = splited_cmd[i];
-		if ((channelStr[0] == '#' || channelStr[0] == '&')) {
-    		channelStr = channelStr.substr(1); 
-			if ((channelStr[channelStr.size() - 1]) == ',') {
-			channelStr = channelStr.substr(0, channelStr.size() - 1);
-		}
-		channels.push_back(channelStr); 
-		}
-	}
-	if (channels.empty())
-		return (0);
-	for (int i = 1; i < splited_cmd.size(); i++) {
-		passwordStr = splited_cmd[i];
-		if ((passwordStr[0] != '#' && passwordStr[0] != '&')) {
-			if ((passwordStr[passwordStr.size() - 1]) == ',') {
-			passwordStr = passwordStr.substr(0, passwordStr.size() - 1);
-		}
-		passwords.push_back(passwordStr); 
-		}
-	}
-	if (passwords.size() > channels.size()) {
-		std::cout << "key exceed channel need to find error code to match when pasword is more that channel\n";
-		return (0); 
-	}
-	for (size_t i = 0; i < channels.size(); ++i) {
-		if (i >= passwords.size()) {
-			passwordStr = "";
+int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, 
+                      const std::vector<std::string> splited_cmd) {
+    std::vector<std::string> channels;
+    std::vector<std::string> passwords;
+    std::vector<std::string> uniqueChannels;
+    std::string channelStr, passwordStr;
+
+    for (size_t i = 1; i < splited_cmd.size(); ++i) {
+		std::string part = splited_cmd[i];
+		if ((part[0] == '#' || part[0] == '&')) {
+			channelStr = part;
+			if (!channelStr.empty() && channelStr[channelStr.size() - 1] == ',') {
+				channelStr.erase(channelStr.size() - 1);
+			}
+			if (std::find(uniqueChannels.begin(), uniqueChannels.end(), channelStr) == uniqueChannels.end()) {
+				uniqueChannels.push_back(channelStr);
+				channels.push_back(channelStr);
+			}
+		} else {
+			passwordStr = part;
+			if (!passwordStr.empty() && passwordStr[passwordStr.size() - 1] == ',') {
+				passwordStr.erase(passwordStr.size() - 1); // Remove trailing comma
+			}
 			passwords.push_back(passwordStr);
 		}
-		token.push_back(std::make_pair(channels[i], passwords[i]));
 	}
-	return (1);
+		if (channels.empty() || passwords.size() > channels.size()) {
+		    std::cout << "Place holder here Error: No valid channels found.\n";
+		    return (0);
+		}
+		for (size_t i = 0; i < channels.size(); ++i) {
+		    if (i >= passwords.size()) {
+		        passwordStr = "";
+		    } else {
+		        passwordStr = passwords[i];
+		    }		
+		    token.push_back(std::make_pair(channels[i], passwordStr));
+		}		
+		return (1); 
 }
 
 // int Server::searchForClients(std::string nickname)
@@ -107,20 +108,6 @@ int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, 
 // }
 
 
-// void Server::notExistCh(std::vector<std::pair<std::string, std::string> >&token, int i, int fd)
-// {
-// 	if (searchForClients(getClient(fd)->getNickName()) >= 10)//ERR_TOOMANYCHANNELS (405) // if the client is already in 10 channels
-// 		{senderror(405, getClient(fd)->getNickName(), getClient(fd)->getFd(), " :You have joined too many channels\r\n"); return;}
-// 	Channel newChannel;
-// 	newChannel.setName(token[i].first);
-// 	newChannel.add_admin(*getClient(fd));
-// 	newChannel.set_createiontime();
-// 	this->_channels.push_back(newChannel);
-// 	// notifiy thet the client joined the channel
-//     sendResponse(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),newChannel.getName()) + \
-//         RPL_NAMREPLY(getClient(fd)->getNickName(),newChannel.getName(),newChannel.clientChannel_list()) + \
-//         RPL_ENDOFNAMES(getClient(fd)->getNickName(),newChannel.getName()),fd);
-// }
 
 	// signal(SIGINT, SignalHandler);
 	// signal(SIGQUIT, SignalHandler);
@@ -131,6 +118,26 @@ int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, 
 // 	_sendMessage("QUIT\r\n", ircsock);
 // }
 
+
+void Server::newChannelCreate(std::string chName, std::string chPass, Client *client)
+{
+	if (client->getChannelSize() >= 10) {
+		std::cerr << "place holder for the max chanel and then return\n";
+		return ;
+	}
+	Channel newChannel;
+	newChannel.setName(chName);
+	if (chPass != "")
+		newChannel.setPassword(chPass);
+	newChannel.add_admin(*client);
+	newChannel.set_createiontime(); //what was this ever used for ???
+	_channels.push_back(newChannel);
+    sendResponse(RPL_JOINMSG(client->getHostname(), client->getIpAdd(), chName), client->getFd());
+	// i dont know what clientChannel_list is used for  here
+    sendResponse(RPL_NAMREPLY(client->getNickName(), chName, newChannel.clientChannel_list()), client->getFd());
+    sendResponse(RPL_ENDOFNAMES(client->getNickName(), chName), client->getFd());
+}
+
 int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {
 	std::vector<std::pair<std::string, std::string> > token;
 
@@ -138,26 +145,29 @@ int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {
 		sendResponse(ERR_NEEDMOREPARAMS(splited_cmd[0]), client->getFd());
 		return (0);
 	}
+	if (DEBUG) {
+		for (size_t i = 0; i < token.size(); ++i) {
+			std::cout << "Key: " << token[i].first << "\n ";
+			std::cout << "Value: " << token[i].second << std::endl;
+		}
+	}
+	
 	if (token.size() > 10) {
-		std::cout << "error for too many channel\n";
+		std::cout << "place holder for error for too many channel\n";
 		// senderror(407, client->getNickName(), getClient(fd)->getFd(), " :Too many channels\r\n");
 		return (0);
 	}
-	// for (size_t i = 0; i < token.size(); i++){
-	// 	bool flag = false;
-	// 	for (size_t j = 0; j < this->_channels.size(); j++){
-	// 		if (this->_channels[j].getName() == token[i].first){
-	// 			existCh(token, i, j, fd);
-	// 			flag = true;
-	// 			break;
-	// 		}
-	// 	}
-	// 	if (!flag)
-	// 		notExistCh(token, i, fd);
-	// }
-	for (size_t i = 0; i < token.size(); ++i) {
-        std::cout << "Key: " << token[i].first << "\n ";
-		std::cout << "Value: " << token[i].second << std::endl;
-    }
+	for (size_t i = 0; i < token.size(); i++){
+		bool flag = false;
+		for (size_t j = 0; j < this->_channels.size(); j++){
+			if (this->_channels[j].getName() == token[i].first){
+				existCh(token, i, j, fd);
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+			newChannelCreate(token[i].first, token[i].second, client);
+	}
 	return (1);
 }
