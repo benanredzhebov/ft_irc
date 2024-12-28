@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/27 15:16:28 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 09:00:40 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,15 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 	}
 	for (size_t i = 0; i < token.size(); ++i) {
 		tmp = token[i].first;
+		std::string message = composeMessage(splited_cmd[0], token[i].second,
+										client->getNickName(), tmp);
 		if (tmp[i] == '#') {
-			std::cout << "implement channel search\n";
+			Channel	*channel;
+			channel = getChannel(tmp);
+			channel->sendTo_all(message, client->getFd());
 		} else {
 			newClient = getClientNick(tmp);
 			if (newClient) {
-				std::string message = composeMessage(splited_cmd[0], token[i].second,
-										client->getNickName(), tmp);
 				sendResponse(message, newClient->getFd());
 			} else {
 				sendResponse(ERR_NOSUCHNICK(client->getNickName(), tmp), client->getFd());	

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 23:23:53 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 08:10:49 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,17 +107,18 @@ class Server {
 		void	removeChannel(std::string name); // Remove a channel by name
 		void	removeFds(int fd); // Remove a file descriptor from poll
 		void	rmChannels(int fd); // Remove channels associated with a client
+		int		recievePasswordVerify(int _client_fdsocket);
 
 		/*SEND_RECEIVE METHODS*/
 		void	sendResponse(std::string response, int fd); // Send response to client
-		int		recievePasswordVerify(int _client_fdsocket);
+		// void	senderror(int code, std::string clientname, int fd, std::string msg); // Send error message to client
+		// void	senderror(int code, std::string clientname, std::string channelname, int fd, std::string msg); // Send error message to client in a channel
 		
-		void	senderror(int code, std::string clientname, int fd, std::string msg); // Send error message to client
-		void	senderror(int code, std::string clientname, std::string channelname, int fd, std::string msg); // Send error message to client in a channel
+		
 
 		/*CLOSE AND SIGNAL METHODS*/
 		void		close_fds(int fd);  // Close all file descriptors
-		static void	signalHandler(int signum); // Handle signals
+		void		signalHandler(int signum); // Handle signals
 
 		/*SERVER METHODS*/
 		// void	save_port_passwd(std::string port, std::string pass); // changed to accept str Initialize server
@@ -132,19 +133,19 @@ class Server {
 		
 		// void	accept_new_client(); // Accept a new client connection
 		
+		/*KICK CMD*/
+		void	KICK(std::string cmd, int fd); // Handle KICK command
+		std::string splitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd); // Split KICK command
+
 		
 		int				resizeFds();
 		
-		void	receiveNewData(int fd); // Receive new data from a client
-
-
-
-
-
-		/*PARSING METHODS*/
-		std::vector<std::string>	split_recivedBuffer(std::string str); // Split received buffer into commands
-		std::vector<std::string>	split_cmd(std::string &str); // Split command string into tokens
-		void						parse_exec_cmd(std::string &cmd, int fd); // Parse and execute command
+		
+		/*PARSING METHODS*/ //unused
+		// std::vector<std::string>	split_recivedBuffer(std::string str); // Split received buffer into commands
+		// std::vector<std::string>	split_cmd(std::string &str); // Split command string into tokens
+		// void						parse_exec_cmd(std::string &cmd, int fd); // Parse and execute command
+		// void						receiveNewData(int fd); // Receive new data from a client
 
 
 
@@ -162,8 +163,9 @@ class Server {
 		bool			userNameInUse(std::string &username); // Check if nickname is in use
 		bool			is_validNickname(std::string &nickname); // Check if nickname is valid
 		bool			is_validUserName(std::string &username); // Check if nickname is valid
-		int				clientInfoSave(int fd); // Authenticate client username && password
-		std::string		receiveSetNameUname(int _client_fdsocket);
+		
+		// int				clientInfoSave(int fd); // Authenticate client username && password
+		// std::string		receiveSetNameUname(int _client_fdsocket);
 		
 
 		
@@ -171,7 +173,6 @@ class Server {
 		bool	notRegistered(int fd); // Check if client is not registered
 		
 	
-
 
 
 		/*JOIN CMD*/
@@ -191,9 +192,6 @@ class Server {
 		void	PART(std::string cmd, int fd); // Handle PART command
 		int		splitCmdPart(std::string cmd, std::vector<std::string> &tmp, std::string &reason, int fd); // Split PART command
 
-		/*KICK CMD*/
-		void	KICK(std::string cmd, int fd); // Handle KICK command
-		std::string splitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd); // Split KICK command
 
 		/*PRIVMSG CMD*/
 		int		PRIVMSG(std::vector<std::string> splited_cmd, Client *client);

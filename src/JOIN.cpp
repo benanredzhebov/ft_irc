@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 23:12:09 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 07:35:20 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
-
-/*It parses the JOIN command to extract channel names and passwords
-RFC 2812 JOIN <channel>{,<channel>} [<key>{,<key>}] */
 
 int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, 
                       const std::vector<std::string> splited_cmd) {
@@ -56,17 +53,6 @@ int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token,
 		return (1); 
 }
 
-// int Server::searchForClients(std::string nickname)
-// {
-// 	int count = 0;
-// 	for (size_t i = 0; i < this->_channels.size(); i++)
-// 	{
-// 		if (this->_channels[i].getClientInChannel(nickname))
-// 			count++;
-// 	}
-// 	return count;
-// }
-
 bool IsInvited(Client *cli, std::string ChName, int flag){
 	if(cli->getInviteChannel(ChName)){
 		if (flag == 1)
@@ -78,26 +64,28 @@ bool IsInvited(Client *cli, std::string ChName, int flag){
 
 void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd)
 {
-	if (this->_channels[j].getClientInChannel(getClient(fd)->getNickName()))// if the client is already registered
+	if (this->_channels[j].getClientInChannel(getClient(fd)->getNickName()))
 		return ;
-	// if (searchForClients(getClient(fd)->getNickName()) >= 10)//ERR_TOOMANYCHANNELS (405) // if the client is already in 10 channels
-	// 	{	std::cout << "send error holder\n"; return ;}
-			// senderror(405, getClient(fd)->getNickName(), getClient(fd)->getFd(), " :You have joined too many channels\r\n"); return;}
-	if (!this->_channels[j].GetPassword().empty() && this->_channels[j].GetPassword() != token[i].second){// ERR_BADCHANNELKEY (475) // if the password is incorrect
-		if (!IsInvited(getClient(fd), token[i].first, 0))
-			{
-				std::cout << "send error holder\n"; return ;}
-				// senderror(475, getClient(fd)->getNickName(), "#" + token[i].first, getClient(fd)->getFd(), " :Cannot join channel (+k) - bad key\r\n"); return;}
+	if (searchForClients(getClient(fd)->getNickName()) >= 10) {
+		sendResponse(ERR_TOOMANYCHANNELS(getClient(fd)->getNickName()), fd);
+		return ;
 	}
-	if (this->_channels[j].getInvitOnly()){// ERR_INVITEONLYCHAN (473) // if the channel is invit only
-		if (!IsInvited(getClient(fd), token[i].first, 1))
-		{	std::cout << "send error holder\n"; return ;}
-			// {senderror(473, getClient(fd)->getNickName(), "#" + token[i].first, getClient(fd)->getFd(), " :Cannot join channel (+i)\r\n"); return;}
+	if (!this->_channels[j].GetPassword().empty() && this->_channels[j].GetPassword() != token[i].second) {
+		if (!IsInvited(getClient(fd), token[i].first, 0)) {
+			sendResponse(ERR_BADCHANNELKEY(getClient(fd)->getNickName(), token[i].first), fd);
+			return ;
+		}
 	}
-	if (this->_channels[j].getLimit() && this->_channels[j].getClientsNumber() >= this->_channels[j].getLimit())// ERR_CHANNELISFULL (471) // if the channel reached the limit of number of clients
-		{	std::cout << "send error holder\n"; return ;}
-		// {senderror(471, getClient(fd)->getNickName(), "#" + token[i].first, getClient(fd)->getFd(), " :Cannot join channel (+l)\r\n"); return;}
-	// add the client to the channel
+	if (this->_channels[j].getInvitOnly()){
+		if (!IsInvited(getClient(fd), token[i].first, 1)) {	
+			sendResponse(ERR_INVITEONLYCHAN(getClient(fd)->getNickName(), token[i].first), fd);
+			return ;
+		}
+	}
+	if (this->_channels[j].getLimit() && this->_channels[j].getClientsNumber() >= this->_channels[j].getLimit()) {
+		sendResponse(ERR_CHANNELISFULL(getClient(fd)->getNickName(), token[i].first), fd);
+		return ;
+	}
 	Client *cli = getClient(fd);
 	this->_channels[j].add_client(*cli);
 	if(_channels[j].getTopicName().empty())
@@ -111,18 +99,6 @@ void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, in
 			RPL_ENDOFNAMES(getClient(fd)->getNickName(),_channels[j].getName()),fd);
     _channels[j].sendTo_all(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first), fd);
 }
-
-
-
-	// signal(SIGINT, SignalHandler);
-	// signal(SIGQUIT, SignalHandler);
-
-// void SignalHandler(int signum){
-// 	(void)signum;
-// 	std::cout << std::endl << "Signal Received!" << std::endl;
-// 	_sendMessage("QUIT\r\n", ircsock);
-// }
-
 
 void Server::newChannelCreate(std::string chName, std::string chPass, Client *client)
 {
@@ -154,11 +130,6 @@ int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {
 			std::cout << "Key: " << token[i].first << "\n ";
 			std::cout << "Value: " << token[i].second << std::endl;
 		}
-	}
-	if (token.size() > 10) {
-		std::cout << "place holder for error for too many channel\n";
-		// senderror(407, client->getNickName(), getClient(fd)->getFd(), " :Too many channels\r\n");
-		return (0);
 	}
 	for (size_t i = 0; i < token.size(); i++){
 		bool flag = false;

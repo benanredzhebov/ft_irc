@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/27 13:12:23 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 08:03:31 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,18 @@ int	Server::resizeFds() {
 	return (0);
 }
 
+std::string concatenateVector(const std::vector<std::string> &splited_cmd) {
+    std::string result;
+    for (size_t i = 0; i < splited_cmd.size(); ++i) {
+        if (!result.empty()) {
+            result += " ";
+        }
+        result += splited_cmd[i];
+    }
+    return result;
+}
+
+
 void Server::handleClientInput(Client* client) {
 	std::vector<std::string>	splited_cmd;
 	splited_cmd = spliting_cmd(client);
@@ -73,13 +85,14 @@ void Server::handleClientInput(Client* client) {
 		if(splited_cmd[0] == "JOIN"){
 			JOIN(splited_cmd, client);
 		}
-		else if(splited_cmd[0] == "PRIVMSG"){
+		else if(splited_cmd[0] == "PRIVMSG") {
 			PRIVMSG(splited_cmd, client);
 		}
+		else if(splited_cmd[0] == "KICK") {
+			std::string temp = concatenateVector(splited_cmd);
+			KICK(temp, client->getFd());
+		}
 		// else if(splited_cmd[0] == "INVITE"){
-			
-		// }
-		// else if(splited_cmd[0] == "KICK"){
 			
 		// }
 		// else if(splited_cmd[0] == "TOPIC"){

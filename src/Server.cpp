@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 22:58:53 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 07:05:39 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,20 @@ int Server::_run_server() {
 	return (1);
 }
 
-// int		Server::searchForClients(std::string nickname){
-	
-// } // Search for clients by nickname
+int		Server::searchForClients(std::string nickname) {
+	Client *cli;
+
+	cli = getClientNick(nickname);
+	return (cli->getChannelSize());
+}
+
+// int Server::searchForClients(std::string nickname)
+// {
+// 	int count = 0;
+// 	for (size_t i = 0; i < this->_channels.size(); i++)
+// 	{
+// 		if (this->_channels[i].getClientInChannel(nickname))
+// 			count++;
+// 	}
+// 	return count;
+// }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KICK.CPP                                           :+:      :+:    :+:   */
+/*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:00:59 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 23:22:46 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 08:26:07 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ std::string Server::splitCmdKick(std::string cmd, std::vector<std::string> &tmp,
 	for (size_t i = 0; i < tmp.size(); i++){// erase the '#' from the channel name and check if the channel valid
 			if (*(tmp[i].begin()) == '#')
 				tmp[i].erase(tmp[i].begin());
-			else
-				{senderror(403, getClient(fd)->getNickName(), tmp[i], getClient(fd)->getFd(), " :No such channel\r\n"); tmp.erase(tmp.begin() + i--);}
+			else {
+				std::cout << "from here or where\n";
+				sendResponse(ERR_NOSUCHCHANNEL(getClient(fd)->getNickName(), tmp[i]) , fd);
+				tmp.erase(tmp.begin() + i--);
+			}
 		}
 	return reason;
 }
@@ -84,15 +87,22 @@ void	Server::KICK(std::string cmd, int fd)
 	std::vector<std::string> tmp;
 	std::string reason ,user;
 	reason = splitCmdKick(cmd, tmp, user, fd);
-	if (user.empty())
-		{senderror(461, getClient(fd)->getNickName(), getClient(fd)->getFd(), " :Not enough parameters\r\n"); return;}
+	if (user.empty()) {
+		sendResponse(ERR_NOTENOUGHPARAM(getClient(fd)->getNickName()) , fd);
+		return;
+	}
+	for (int i = 0; i < tmp.size(); i++) {
+		std::cout << "value = " << tmp[i] << std::endl;
+	}
 	for (size_t i = 0; i < tmp.size(); i++){ // search for the channel
 		if (getChannel(tmp[i])){// check if the channel exist
 			Channel *ch = getChannel(tmp[i]);
-			if (!ch->get_client(fd) && !ch->get_admin(fd)) // check if the client is in the channel
-				{senderror(442, getClient(fd)->getNickName(), "#" + tmp[i], getClient(fd)->getFd(), " :You're not on that channel\r\n"); continue;}
-			if(ch->get_admin(fd)){ // check if the client is admin
-				if (ch->getClientInChannel(user)){ // check if the client to kick is in the channel
+			if (!ch->get_client(fd) && !ch->get_admin(fd)) {
+				sendResponse(ERR_NOTONCHANNEL(getClient(fd)->getNickName(), tmp[i]) , fd);
+				continue;
+			}
+			if(ch->get_admin(fd)) { // check if the client is admin
+				if (ch->getClientInChannel(user)) { // check if the client to kick is in the channel
 					std::stringstream ss;
 					ss << ":" << getClient(fd)->getNickName() << "!~" << getClient(fd)->getUserName() << "@" << "localhost" << " KICK #" << tmp[i] << " " << user;
 					if (!reason.empty())
@@ -106,13 +116,20 @@ void	Server::KICK(std::string cmd, int fd)
 					if (ch->getClientsNumber() == 0)
 						_channels.erase(_channels.begin() + i);
 				}
-				else // if the client to kick is not in the channel
-					{senderror(441, getClient(fd)->getNickName(), "#" + tmp[i], getClient(fd)->getFd(), " :They aren't on that channel\r\n"); continue;}
+				else {
+					sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNickName(), tmp[i]), fd);
+					continue;
+				}
 			}
-			else // if the client is not admin
-				{senderror(482, getClient(fd)->getNickName(), "#" + tmp[i], getClient(fd)->getFd(), " :You're not channel operator\r\n"); continue;}
+			else {
+				sendResponse(ERR_CHANOPRIVSNEEDED(getClient(fd)->getNickName(), tmp[i]), fd);
+				continue;
+			}
 		}
-		else // if the channel doesn't exist
-			senderror(403, getClient(fd)->getNickName(), "#" + tmp[i], getClient(fd)->getFd(), " :No such channel\r\n");
+		else
+		{
+			std::cout << "from last end\n\n\n";
+			sendResponse(ERR_NOSUCHCHANNEL(getClient(fd)->getNickName(), tmp[i]) , fd);
+		}
 	}
 }

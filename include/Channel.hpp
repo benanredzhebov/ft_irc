@@ -17,7 +17,10 @@ class Channel {
 		std::string							_password; // Password for the channel
 		std::string							_created_at; // Creation timestamp
 		std::string							_topic_name; // Name of the topic
+
 		std::vector<Client>					_clients; // List of clients in the channel
+
+		
 		std::vector<Client>					_admins; // List of admins in the channel
 		std::vector<std::pair<char, bool> >	_modes; // List of modes and their statuses
 
