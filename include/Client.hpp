@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 18:52:19 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 22:04:54 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ class Client {
 	void			setFd(int fd); // Set the file descriptor
 	void			setBuffer(std::string received); // Set the buffer
 	void			setIpAdd(std::string ipadd);
+	
 	void			setPasswordVerified(bool verified);
 
 

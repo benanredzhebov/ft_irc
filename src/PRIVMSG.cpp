@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/28 09:00:40 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:04:55 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 		if (tmp[i] == '#') {
 			Channel	*channel;
 			channel = getChannel(tmp);
-			channel->sendTo_all(message, client->getFd());
+			if (client) {
+				if (channel->checkClientExistence(client->getFd())){
+					channel->sendTo_all(message, client->getFd());	
+				}
+			}
 		} else {
 			newClient = getClientNick(tmp);
 			if (newClient) {

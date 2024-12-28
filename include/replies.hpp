@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 08:00:26 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:45:13 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 #define ERR_CHANOPRIVSNEEDED(client_nick, channel)(":482\t" + client_nick + " " + channel + " :You're not channel operator" + CRLF)
 #define ERR_NOSUCHCHANNEL(client_nick, channel)(":403\t" + client_nick + " " + channel + " :No such channel" + CRLF)
 
+#define ERR_USERONCHANNEL(client_nick, channel, inviter)(":443\t" + inviter + " " + client_nick + " " + channel + " :is already on channel" + CRLF)
+
 
 
 
@@ -54,11 +56,11 @@
 #define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " " +channelname + " :" + topic + "\r\n")
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " " + channelname + " :END of /NAMES list" + CRLF)
 
+#define ERR_NOTENOUGHPARAM(nickname) (":461\t" + nickname + " :Not enough parameters." + CRLF)
+#define ERR_NEEDMOREPARAMS(command) (":461\t" + command + " :Not enough parameters" + CRLF )
 
 #define ERR_NOSUCHNICK(sender_nick, target_nick)("\t :401 sender:" + sender_nick + " " + target_nick + ":No such nick/channel" + CRLF)
-#define ERR_NOTENOUGHPARAM(nickname) (":461\t" + nickname + " :Not enough parameters." + CRLF)
 #define ERR_INCORPASS(password) (":	464 \n\t\t" + password + " :Password incorrect !" + CRLF )
-#define ERR_NEEDMOREPARAMS(command) (":	461 \n\t\t" + command + " :Not enough parameters" + CRLF )
 #define ERR_ALREADYREGISTERED(nickname) (":	462 \n\t\t" + nickname + " :You may not reregister !" + CRLF )
 #define G_PASSWORD "	✅✅ PASSWORD CORRECT ✅✅\n ...continue with nick and username\n"
 #define PASSWORD_AUTH_FAILED "	PASSWORD FAILED BYE 👋\n"

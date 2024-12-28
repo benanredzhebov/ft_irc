@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 08:10:49 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:23:01 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class Server {
 		Server(const Server &other);
 		Server &operator=(const Server &other);
 
-		int _runServerUtils(int x, int fd);
+		// int _runServerUtils(int x, int fd);
 
 		/*GETTERS*/
 		static bool	isBotfull; // Flag to check if bot is full
@@ -88,7 +88,6 @@ class Server {
 		Channel		*getChannel(std::string name); // Get channel by name
 		
 		
-
 		/*SETTERS*/
 		void	setFd(int server_fdsocket); // Set server file descriptor
 		void	addFds(pollfd newFd); // Add a new file descriptor to poll
@@ -223,9 +222,11 @@ class Server {
 
 	
 		/*TOPIC CMD*/
+		void		INVITE(std::vector<std::string> splited_cmd, Client *client); // Handle invite command
+	
+	
 		std::string Topic(); // Get topic
 		void 		Topic(std::string &cmd, int &fd); // Set topic
-		void		Invite(std::string &cmd, int &fd); // Handle invite command
 		std::string	gettopic(std::string& input); // Get topic from input
 		int			getpos(std::string &cmd); // Get position from command
 		

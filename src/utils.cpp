@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/28 08:03:31 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:23:25 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void Server::handleClientInput(Client* client) {
 			std::string temp = concatenateVector(splited_cmd);
 			KICK(temp, client->getFd());
 		}
-		// else if(splited_cmd[0] == "INVITE"){
-			
-		// }
+		else if(splited_cmd[0] == "INVITE") {
+			INVITE(splited_cmd, client);
+		}
 		// else if(splited_cmd[0] == "TOPIC"){
 			
 		// }

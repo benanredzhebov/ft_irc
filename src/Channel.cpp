@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 17:29:07 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:03:27 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ Client		*Channel::get_client(int fd) {
 	}
 	return NULL;
 }
+
 Client		*Channel::get_admin(int fd) {
 	for (std::vector<Client>::iterator	it = _admins.begin(); it != _admins.end(); ++it) {
 		if (it->getFd() == fd)
@@ -242,4 +243,13 @@ void		Channel::sendTo_all(std::string rpl1, int fd) {
 			if(send(_clients[i].getFd(), rpl1.c_str(), rpl1.size(),0) == -1)
 				std::cerr << "send() faild" << std::endl;
 	}
+}
+
+int Channel::checkClientExistence(int fd) {
+	for (int i = 0; i < _clients.size(); i++) {
+		if (_clients[i].getFd() == fd) {
+			return (1);
+		}
+	}
+	return (0);
 }

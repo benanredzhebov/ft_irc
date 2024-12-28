@@ -44,6 +44,9 @@ class Channel {
 		void		setModeAtindex(size_t index, bool mode); // Set mode at index
 		void		set_createiontime(); // Set creation time
 
+		
+		
+		int			checkClientExistence(int fd);
 		/*GETTERS*/
 		int			getInvitOnly(); // Get invitation-only flag
 		int			getTopic(); // Get topic
