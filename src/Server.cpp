@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/25 22:16:32 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 22:58:53 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,3 +112,7 @@ int Server::_run_server() {
 	close_fds(_server_fdsocket);
 	return (1);
 }
+
+// int		Server::searchForClients(std::string nickname){
+	
+// } // Search for clients by nickname

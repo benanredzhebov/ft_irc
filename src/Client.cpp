@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 18:09:14 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:00:37 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,7 @@ void		Client::setLogedIn(bool value) { this->_logedin = value; }
 void		Client::setIpAdd(std::string ipadd) { this->_ipadd = ipadd; }
 void		Client::setClientFd(int fd) { _fd = fd; }
 void		Client::nickSet(bool value) { _nickbool = value; }
+
+void		Client::rmChannelInvite(std::string &chname){
+	std::cout << "remove channel name was called\n";
+}

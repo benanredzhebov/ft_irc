@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 19:20:40 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:23:53 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ class Server {
 		
 		Client		*getClient(int fd); // Get client by file descriptor
 		Client		*getClientNick(std::string nickname); // Get client by nickname
-		// Channel		*getChannel(std::string name); // Get channel by name
+		Channel		*getChannel(std::string name); // Get channel by name
 		
 		
 
@@ -170,9 +170,7 @@ class Server {
 		bool	byPassForBot(std::string cmd, int fd); // Bypass authentication for bot
 		bool	notRegistered(int fd); // Check if client is not registered
 		
-		
-
-
+	
 
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.CPP                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:00:59 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/26 10:02:23 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:22:46 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ std::string Server::splitCmdKick(std::string cmd, std::vector<std::string> &tmp,
 				{senderror(403, getClient(fd)->getNickName(), tmp[i], getClient(fd)->getFd(), " :No such channel\r\n"); tmp.erase(tmp.begin() + i--);}
 		}
 	return reason;
+}
+
+Channel* Server::getChannel(std::string name) {
+    for (size_t i = 0; i < this->_channels.size(); i++) {
+        if (this->_channels[i].getName() == name)
+            return &_channels[i];
+    }
+    return NULL;
 }
 
 void	Server::KICK(std::string cmd, int fd)
