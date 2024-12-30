@@ -41,10 +41,8 @@ void Server::INVITE(std::vector<std::string> splited_cmd, Client *client)
 		sendResponse(ERR_CHANNELISFULL(clt->getNickName(), splited_cmd[2]), client->getFd());
 		return;
 	}
-	//method not implemented yet(this would take channel in client class and add all , the remove does same )
-	//the invites works partially bc the message is sent to new client but when the new client sends messgas it doesnt go bc of the client doesnt have the channel added
-	// clt->addChannelInvite(splited_cmd[2]);
-	std::string rep1 = ": 341 "+ client->getNickName()+" "+ clt->getNickName()+" "+ splited_cmd[2] +"\r\n";
+	getChannel(splited_cmd[2])->add_client(*clt);
+	std::string rep1 = ": 341 "+ client->getNickName()+ " " + clt->getNickName()+" "+ splited_cmd[2] +"\r\n";
 	sendResponse(rep1, client->getFd());
 	std::string rep2 = ":"+ clt->getHostname() + " INVITE " + clt->getNickName() + " " + splited_cmd[2]+ "\r\n";
 	sendResponse(rep2, clt->getFd());

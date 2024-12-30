@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 21:23:01 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:40:51 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,8 @@ class Server {
 		int			getpos(std::string &cmd); // Get position from command
 		
 };
+
+void signalHandler(int signum);
 
 
 std::vector<std::string>	spliting_cmd(Client *cli);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/28 21:23:25 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:41:53 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ void Server::handleClientInput(Client* client) {
 		else if(splited_cmd[0] == "INVITE") {
 			INVITE(splited_cmd, client);
 		}
+		// else if(splited_cmd[0] == "QUIT") {
+		// 	signalHandler();
+		// }
 		// else if(splited_cmd[0] == "TOPIC"){
 			
 		// }

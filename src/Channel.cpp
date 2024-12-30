@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 21:03:27 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:18:00 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,7 @@ void		Channel::sendTo_all(std::string rpl1, int fd) {
 
 int Channel::checkClientExistence(int fd) {
 	for (int i = 0; i < _clients.size(); i++) {
+		std::cout << "checking = " << fd << std::endl;
 		if (_clients[i].getFd() == fd) {
 			return (1);
 		}

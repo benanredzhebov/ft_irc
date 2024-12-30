@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 07:35:20 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:31:55 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 	newChannel.setName(chName);
 	if (chPass != "")
 		newChannel.setPassword(chPass);
+	newChannel.add_client(*client);
 	newChannel.add_admin(*client);
 	newChannel.set_createiontime(); //what was this ever used for ???
 	_channels.push_back(newChannel);

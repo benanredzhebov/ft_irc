@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:33:37 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 07:31:26 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:39:42 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int main(int ac, char **av) {
 		std::cout << "Usage: " << av[0] << " <port number> <password>" << std::endl;
 		return 0;
 	}
-	// signal(SIGINT, signalHandler);
-	// signal(SIGQUIT, signalHandler);
 	port = std::atoi(av[1]);
 	pass = av[2];
 	Server server(port, pass);
+	signal(SIGINT, signalHandler);
+	signal(SIGQUIT, signalHandler);
 	std::cout << "---SERVER---" << std::endl;
 	server._run_server();
 }

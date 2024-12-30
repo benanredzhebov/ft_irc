@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/28 21:04:55 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:30:15 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 			Channel	*channel;
 			channel = getChannel(tmp);
 			if (client) {
-				if (channel->checkClientExistence(client->getFd())){
-					channel->sendTo_all(message, client->getFd());	
+				//for some reasons unkown admin or owner fd is not in the channel ?
+				if (channel->checkClientExistence(client->getFd())) {
+					channel->sendTo_all(message, client->getFd());
 				}
 			}
 		} else {

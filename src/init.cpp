@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/28 07:31:07 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:40:25 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ bool	Server::userNameInUse(std::string &username) {
 	return false;
 }
 
-// void Server::signalHandler(int signum) {
-// 	(void)signum;
-// 	std::cout << std::endl << "Signal Received!" << std::endl;
-// 	sendResponse("QUIT\r\n", );
-// }
+void signalHandler(int signum) {
+	(void)signum;
+	std::cout << std::endl << "Signal Received!" << std::endl;
+	// sendResponse("QUIT\r\n", fd);
+}
