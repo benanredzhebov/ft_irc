@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/29 13:31:55 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/30 20:49:50 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 	newChannel.setName(chName);
 	if (chPass != "")
 		newChannel.setPassword(chPass);
-	newChannel.add_client(*client);
-	newChannel.add_admin(*client);
+	// newChannel.add_client(*client); 
+	newChannel.add_admin(*client); // ensure the admin has been added to the channel
 	newChannel.set_createiontime(); //what was this ever used for ???
 	_channels.push_back(newChannel);
     sendResponse(RPL_JOINMSG(client->getHostname(), client->getIpAdd(), chName), client->getFd());

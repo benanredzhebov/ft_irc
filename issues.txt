@@ -1,0 +1,10 @@
+1. User parameters is not correct. We should take everything after ":" like one word. 
+   Second parameter (mode) need to be save.
+
+2. User or Nickname doesn't have a particular order
+
+3. This is showing the admin and regular as join ? which is wrong .. the admin is already part of the channel.. fix it 
+   When admin send message the members of the channel doesn't get it bc the admin not part of the channel..
+    admin is part of the channel at the same time not part , bc when admin send other client dont recieve but when cleint send other admin recieves
+
+

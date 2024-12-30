@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/29 13:18:00 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/30 21:13:23 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,11 @@ Client* Channel::getClientInChannel(std::string name) {
 /*METHODS*/
 
 void	Channel::add_client(Client newClient) {_clients.push_back(newClient);}
-void	Channel::add_admin(Client newClient) {_admins.push_back(newClient);}
+
+void	Channel::add_admin(Client newClient) {
+	_admins.push_back(newClient);
+	// add_client(newClient);
+	}
 
 void	Channel::remove_client(int fd) {
 	for (std::vector<Client>::iterator	it = _clients.begin(); it != _clients.end(); ++it) {

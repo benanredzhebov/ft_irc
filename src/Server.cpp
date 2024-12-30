@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 07:05:39 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/30 20:29:39 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ int	Server::_serverAcceptIncoming(){
 int Server::_run_server() {
 	int			clientFD;
 	epfd = epoll_create1(0);
+	if (epfd == -1) {
+		std::cerr << "Failed creating an instance of epoll" << std::endl;
+		return (0);
+	}
 
 	if (!_setServerSocket())
 		return (0);
