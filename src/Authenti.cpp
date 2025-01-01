@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/26 17:09:26 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:23:39 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,11 @@ int Server::clientNickName(Client *cli, std::vector<std::string> splited_cmd) {
 	if (splited_cmd.size() == 2) {
 		if (splited_cmd[0] == "NICK") {
 			if (cli->getRegistered()) {
-				if (set_nickname(splited_cmd[1], cli))
+				if (set_nickname(splited_cmd[1], cli)) {
+					if (!confirmClientInfo(cli))
+						return (0);
 					return (1);
+				}
 			}
 		}
 		else {
@@ -73,23 +76,25 @@ int Server::clientNickName(Client *cli, std::vector<std::string> splited_cmd) {
 }
 
 int Server::clientUserName(Client *cli, std::vector<std::string> splited_cmd) {
-	if (!cli->nickGet())
-		return (0);
-
-	if (splited_cmd.size() == 5) {
-		if (splited_cmd[0] == "USER") {
+	std::vector<std::string> temp_vec;
+	
+	if (splited_cmd[0] == "USER") {
+		if (splited_cmd[4][0] == ':' || splited_cmd[4] == ":") {
+			for (int i = 0; i < 4; i++) {
+				temp_vec.push_back(splited_cmd[i]);
+			}
+			std::string temp = getColonMessage(4, splited_cmd);
+			temp_vec.push_back(temp);
 			if (cli->getRegistered()) {
-				if (set_username(splited_cmd, cli)) {
-					confirmClientInfo(cli);
+				if (set_username(temp_vec, cli)) {
+					if (!confirmClientInfo(cli))
+						return (0);
 					return (1);
 				}
 			}
-		}
+		}	
 	}
-	else {
-		sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), cli->getFd());
-		return (0);
-	}
+	sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), cli->getFd());
 	return (0);
 }
 
@@ -121,11 +126,9 @@ int	Server::set_nickname(std::string cmd, Client *cli) {
 	return (0);
 }
 
-
 int	Server::set_username(std::vector<std::string> splited_cmd, Client *cli)
 {
 	if((splited_cmd.empty() || splited_cmd.size() != 5)) {
-		std::cout << "from username\n" << std::endl;
 		sendResponse(ERR_NOTENOUGHPARAM(cli->getNickName()), cli->getFd());
 		return (0); 
 	}

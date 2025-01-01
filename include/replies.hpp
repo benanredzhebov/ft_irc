@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 21:45:13 by danevans         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:02:44 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #define CRLF "\r\n"
 
 #define RPL_CONNECTED(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + CRLF)
+#define CHANTOPIC(client_nick, channel, topic)(": " + client_nick + "!" + client_nick + "@hostname TOPIC " + channel + " " + topic + CRLF)
+
 
 /*ERRORS*/
 #define ERR_ERRONEUSNICK(nickname) (":432\t" + nickname + " :Erroneus nickname" + CRLF) //a nickname with errors in it

@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/29 13:40:51 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/01 03:09:11 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,8 @@ class Server {
 		void		INVITE(std::vector<std::string> splited_cmd, Client *client); // Handle invite command
 	
 	
-		std::string Topic(); // Get topic
+		void		TOPIC(std::vector<std::string> splited_cmd, Client *client);
+	
 		void 		Topic(std::string &cmd, int &fd); // Set topic
 		std::string	gettopic(std::string& input); // Get topic from input
 		int			getpos(std::string &cmd); // Get position from command
@@ -239,4 +240,8 @@ std::vector<std::string>	spliting_cmd(Client *cli);
 std::string					toUpper(const std::string& str);
 std::string					trim(const std::string& str);
 
+
+
+
+std::string getColonMessage(int x, std::vector<std::string> str);
 #endif

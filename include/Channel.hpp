@@ -5,6 +5,7 @@
 #include "./Server.hpp"
 
 class Client;
+
 class Channel {
 	private:
 		int									_invit_only; // Invitation-only flag

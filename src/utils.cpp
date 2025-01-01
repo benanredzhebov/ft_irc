@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/29 13:41:53 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:24:50 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::string concatenateVector(const std::vector<std::string> &splited_cmd) {
     return result;
 }
 
-
 void Server::handleClientInput(Client* client) {
 	std::vector<std::string>	splited_cmd;
 	splited_cmd = spliting_cmd(client);
@@ -95,11 +94,11 @@ void Server::handleClientInput(Client* client) {
 		else if(splited_cmd[0] == "INVITE") {
 			INVITE(splited_cmd, client);
 		}
+		else if(splited_cmd[0] == "TOPIC"){
+			TOPIC(splited_cmd, client);
+		}
 		// else if(splited_cmd[0] == "QUIT") {
 		// 	signalHandler();
-		// }
-		// else if(splited_cmd[0] == "TOPIC"){
-			
 		// }
 		// else if(splited_cmd[0] == "MODE"){
 			

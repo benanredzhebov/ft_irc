@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/30 21:13:23 by beredzhe         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:18:39 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ Channel::Channel() {
 	this->_topic_restriction = false;
 	this->_name = "";
 	this->_created_at = "";
+	this->_topic_name = "";
 	
 	// Initialize the _modes vector
 	this->_modes.push_back(std::make_pair('i', false));
@@ -39,6 +40,9 @@ Channel &Channel::operator=(const Channel &other) {
 	if (this != &other) {
 		this->_invit_only = other._invit_only;
 		this->_topic = other._topic;
+		
+		this->_topic_name = other._topic_name;
+		
 		this->_key = other._key;
 		this->_limit = other._limit;
 		this->_topic_restriction = other._topic_restriction;
@@ -98,7 +102,11 @@ bool		Channel::clientInChannel(std::string &nick) {
 	return false;
 }
 
-std::string	Channel::getTopicName() {return this->_topic_name;}
+std::string	Channel::getTopicName() {
+	if (_topic_name.empty())
+		_topic_name = "";
+	return this->_topic_name;
+}
 std::string	Channel::GetPassword() {return this->_password;}
 std::string	Channel::getName() {return this->_name;}
 std::string	Channel::getTime() {return this->_time_creation;}
@@ -178,7 +186,7 @@ void	Channel::add_client(Client newClient) {_clients.push_back(newClient);}
 void	Channel::add_admin(Client newClient) {
 	_admins.push_back(newClient);
 	// add_client(newClient);
-	}
+}
 
 void	Channel::remove_client(int fd) {
 	for (std::vector<Client>::iterator	it = _clients.begin(); it != _clients.end(); ++it) {
@@ -251,10 +259,15 @@ void		Channel::sendTo_all(std::string rpl1, int fd) {
 
 int Channel::checkClientExistence(int fd) {
 	for (int i = 0; i < _clients.size(); i++) {
-		std::cout << "checking = " << fd << std::endl;
 		if (_clients[i].getFd() == fd) {
 			return (1);
 		}
 	}
+	for (int i = 0; i < _admins.size(); i++) {
+		if (_admins[i].getFd() == fd) {
+			return (1);
+		}
+	}
+	std::cout << "checking = " << fd << std::endl;
 	return (0);
 }
