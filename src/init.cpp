@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/29 13:40:25 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/01 19:31:45 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ bool	Server::userNameInUse(std::string &username) {
 	return false;
 }
 
-void signalHandler(int signum) {
+bool Server::_signal = false; //-> initialize the static boolean
+void Server::signalHandler(int signum)
+{
 	(void)signum;
-	std::cout << std::endl << "Signal Received!" << std::endl;
-	// sendResponse("QUIT\r\n", fd);
+	std::cout << std::endl << "Signal Received!" << std::endl << std::flush;
+	Server::_signal = true; //-> set the static boolean to true to stop the server
 }

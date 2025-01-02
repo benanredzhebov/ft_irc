@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/27 23:00:37 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/02 02:44:06 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ Client::Client()
       _isOperator(false), 
       _nickname(""), 
       _username(""), 
-      _buffer(""), 
       _ipadd("") {
-	std::cout << "default constructor called\n";
 }
 
 Client::Client(const Client& other) 
@@ -35,14 +33,10 @@ Client::Client(const Client& other)
 		_passwordVerified(other._passwordVerified),
 		_username(other._username),
 		_nickname(other._nickname),
-		_buffer(other._buffer),
 		_ipadd(other._ipadd),
 		_nickbool(other._nickbool),
 		_channels(other._channels),
-      _channelIsInvite(other._channelIsInvite) {
-	std::cout << "copy constructor called\n";
-	
-}
+      _channelIsInvite(other._channelIsInvite) {}
 
 Client& Client::operator=(const Client& other) {
     if (this != &other) {
@@ -54,19 +48,15 @@ Client& Client::operator=(const Client& other) {
         this->_passwordVerified = other._passwordVerified;
         this->_username = other._username;
         this->_nickname = other._nickname;
-        this->_buffer = other._buffer;
         this->_ipadd = other._ipadd;
         this->_nickbool = other._nickbool;
         this->_channels = other._channels;
         this->_channelIsInvite = other._channelIsInvite;
     }
-	std::cout << "copy assignment constructor called\n";
     return *this;
 }
 
-Client::~Client(){
-		std::cout << "destructor calleed" << std::endl;
-}
+Client::~Client(){}
 
 /*GETTERS*/
 
@@ -75,7 +65,7 @@ bool			Client::getRegistered() { return this->_registered; }
 bool			Client::getLogedIn() { return this->_logedin; }
 std::string		Client::getNickName() { return this->_nickname; }
 std::string		Client::getUserName() { return this->_username; }
-std::string		Client::getBuffer() { return _buffer; }
+// std::string		Client::getBuffer() { return _buffer; }
 std::string		Client::getIpAdd() { return _ipadd; }
 
 std::string		Client::getHostname() {
@@ -99,11 +89,10 @@ int 		Client::getPasswordTrials() const { return _passwordTrials; }
 
 
 /*SETTERS*/
-void		Client::setFd(int fd) { this->_fd = fd; }
+// void		Client::setBuffer(std::string received) { _buffer += received; }
 void		Client::setRegistered(bool value) { this->_registered = value; }
 void		Client::setNickName(std::string &nickname) { this->_nickname = nickname; }
 void		Client::setUsername(std::string &username) { this->_username = username; }
-void		Client::setBuffer(std::string received) { _buffer += received; }
 void		Client::setLogedIn(bool value) { this->_logedin = value; }
 void		Client::setIpAdd(std::string ipadd) { this->_ipadd = ipadd; }
 void		Client::setClientFd(int fd) { _fd = fd; }
@@ -111,4 +100,12 @@ void		Client::nickSet(bool value) { _nickbool = value; }
 
 void		Client::rmChannelInvite(std::string &chname){
 	std::cout << "remove channel name was called\n";
+}
+
+void		Client::deleteClientfromChannels() {
+	std::cout << "size = " << _channels.size() << std::endl; 
+	for (int i = 0; i < _channels.size() ; i++) {
+		_channels[i].remove_client(_fd);
+		_channels[i].remove_admin(_fd);
+	}
 }

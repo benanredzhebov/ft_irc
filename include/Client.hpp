@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 22:04:54 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/02 00:56:52 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Client {
 		std::string					_buffer; // Buffer for storing received data
 		std::string					_ipadd; // IP address of the client
 		bool						_nickbool; // Flag for nickname-related logic
+		
 		std::vector<Channel>		_channels; // List of channels the client belongs to
 		std::vector<std::string>	_channelIsInvite; // List of channels where the client has an invite
 	
@@ -39,9 +40,6 @@ class Client {
 		Client(const Client &other);
 		Client &operator=(const Client &other);
     	~Client();
-    // Client() : _fd(-1), _registered(false), _nickbool(false), _logedin(false), _passwordTrials(3){}
-
-	
 	
 	int				getFd();
 	bool			getRegistered();
@@ -55,7 +53,6 @@ class Client {
 	std::string		getHostname();
 	
 	bool			getInviteChannel(std::string &chName);
-	bool			getPasswordVerified() const;
 
 
 
@@ -66,24 +63,19 @@ class Client {
 	void			setRegistered(bool value); // Set the registered flag
 	void			setClientFd(int fd);
 	void			setLogedIn(bool value); // Set the logged in flag
-
-	
-	void			setFd(int fd); // Set the file descriptor
-	void			setBuffer(std::string received); // Set the buffer
 	void			setIpAdd(std::string ipadd);
 	
-	void			setPasswordVerified(bool verified);
+	// void			setBuffer(std::string received); // Set the buffer
+	// void			setPasswordVerified(bool verified);
+	// void			addChannelInvite(std::string &chname); // Add a channel invite
 
 
 
 	/* METHODS */
 	void			decrementPasswordTrials();
-    int 			getPasswordTrials() const;
-	
-	
-	void			clearBuffer(); // Clear the buffer
-	void			addChannelInvite(std::string &chname); // Add a channel invite
-	void			rmChannelInvite(std::string &chname); // Remove a channel invite
+    int 			getPasswordTrials() const;	
+	void			rmChannelInvite(std::string &chname);
+	void			deleteClientfromChannels();
 };
 
 #endif

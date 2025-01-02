@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/30 20:49:50 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/02 03:31:20 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, in
 		return ;
 	}
 	Client *cli = getClient(fd);
-	this->_channels[j].add_client(*cli);
+	if (this->_channels[j].getAdminSize() == 0)
+		this->_channels[j].add_admin(*cli);
+	else
+		this->_channels[j].add_client(*cli);
 	if(_channels[j].getTopicName().empty())
 		sendResponse(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first) + \
 			RPL_NAMREPLY(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].clientChannel_list()) + \
@@ -106,6 +109,7 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 		std::cerr << "place holder for the max chanel and then return\n";
 		return ;
 	}
+	std::cerr << "here from new\n";
 	Channel newChannel;
 	newChannel.setName(chName);
 	if (chPass != "")

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/30 20:37:21 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/02 02:01:27 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,27 @@ std::vector<std::string>	spliting_cmd(Client *cli) {
 	size_t						bytes;
 	std::vector<std::string>	vec;
 	std::string					cleaned_buffer;
-	
-	bytes = recv(cli->getFd(), buffer, sizeof(buffer) - 1, 0);
-	if (bytes <= 0) {
-		std::cerr << "\n😕Passwoord failed😕\n" << std::endl;
-		return vec;
+	std::string					temp_buffer;
+
+	while (true) {	
+		bytes = recv(cli->getFd(), buffer, sizeof(buffer) - 1, 0);
+		if (bytes <= 0) {
+			return vec;
+		}
+		buffer[bytes] = '\0';
+		temp_buffer.append(buffer);
+		if (temp_buffer.find('\n') != std::string::npos)
+			break ;
 	}
-	if (buffer[bytes - 1] == '\n') {
-		buffer[bytes - 1] = '\0';
+	if (!temp_buffer.empty() && temp_buffer[temp_buffer.size() - 1] == '\n') {
+		temp_buffer.erase(temp_buffer.size() - 1, 1);
 	}
-	cleaned_buffer = trim(std::string(buffer));
+	cleaned_buffer = trim(std::string(temp_buffer));
 	std::istringstream	stm(cleaned_buffer);
 	std::string	token;
-	while (stm >> token) { // Reads tokens from the stream stm, into the string token using >> operator
-		vec.push_back(token); // Adds each token to the vectors
-		// token.clear();
+	while (stm >> token) { 
+		vec.push_back(token);
+		token.clear();
 	}
 	if (!vec.empty()) {
 		vec[0] = toUpper(vec[0]);

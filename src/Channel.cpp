@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/31 16:18:39 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/02 03:26:55 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	Channel::set_createiontime() {
 }
 
 /*GETTERS*/
+int			Channel::getAdminSize() {return this->_admins.size();}
+
 int			Channel::getInvitOnly() {return this->_invit_only;}
 int			Channel::getTopic() {return this->_topic;}
 int			Channel::getKey() {return this->_key;}
@@ -196,9 +198,16 @@ void	Channel::remove_client(int fd) {
 }
 
 void	Channel::remove_admin(int fd) {
-	for (std::vector<Client>::iterator	it = _admins.begin(); it != _admins.end(); ++it) {
-		if (it->getFd() == fd)
-			{_admins.erase(it); break;}
+    for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end(); ) {
+        if (it->getFd() == fd) {
+			_admins.erase(it);
+			if (_admins.empty() && !_clients.empty()) {
+				_admins.push_back(_clients.front());
+			}
+			break;
+		} else {
+			++it;
+		}
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/30 20:29:39 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/02 02:06:55 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int Server::_createBindListen(){
 		return (0);
 	if (!_serverListens())
 		return (0);
-	std::cout << "\ncreating, binding and listening successfully\n" << std::endl;
+	std::cout << GRE << "Server fd [" << _server_fdsocket << "] connected" << RESET << std::endl;
 	return (1);
 }
 

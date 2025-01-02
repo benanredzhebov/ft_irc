@@ -49,6 +49,9 @@ class Channel {
 		
 		int			checkClientExistence(int fd);
 		/*GETTERS*/
+		int			getAdminSize();
+
+
 		int			getInvitOnly(); // Get invitation-only flag
 		int			getTopic(); // Get topic
 		int			getKey(); // Get key (password)

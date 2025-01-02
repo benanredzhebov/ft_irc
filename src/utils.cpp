@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/01 18:24:50 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/02 03:02:38 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,22 @@ epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
 	return (events);
 }
 
-void	Server::removeClient(int fd) {
-	sendResponse(PASSWORD_AUTH_FAILED, fd);
+void	Server::removeClientInstance(int fd) {
+	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
 	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
     	if (it->getFd() == fd) {
     	    _clients.erase(it);
     	    break;
     	}
 	}
-	close_fds(fd);
+}
+
+void	Server::removeClientfromChannel(Client *cli) {
+	for (int i = 0; i < _channels.size(); i++) {
+		_channels[i].remove_admin(cli->getFd());
+		_channels[i].remove_client(cli->getFd());
+	}
+	removeClientInstance(cli->getFd());
 }
 
 int	Server::_setServerSocket() {
@@ -69,8 +76,9 @@ void Server::handleClientInput(Client* client) {
 	splited_cmd = spliting_cmd(client);
 
 	if (splited_cmd.empty()) {
-		splited_cmd[0] = "*";
-		sendResponse(ERR_NEEDMOREPARAMS(splited_cmd[0]), client->getFd());
+		std::cout << RED << "Client fd [" << client->getFd() << "] disconnected" << RESET << std::endl;
+		removeClientfromChannel(client);
+		close_fds(client->getFd());
 		return ;
 	}
 	if(splited_cmd[0] == "PASS")

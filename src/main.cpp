@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:33:37 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/30 20:34:55 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/01 21:41:51 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int main(int ac, char **av)
 		return 0;
 	}
 	port = std::atoi(av[1]);
+	signal(SIGINT, Server::signalHandler);
+	signal(SIGQUIT, Server::signalHandler);
 	pass = av[2];
 	Server server(port, pass);
 	std::cout << "---SERVER---" << std::endl;

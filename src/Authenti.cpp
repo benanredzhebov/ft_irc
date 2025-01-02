@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/01 18:23:39 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/02 02:16:33 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	Server::clientPasswordVerify(Client *cli, std::vector<std::string>	splited_c
 		if (splited_cmd[0] == "PASS") {
 			if (!cli->getRegistered()) {
 				if (_password == splited_cmd[1]) {
-					std::cout << "[ " << cli->getFd() << " ] " << "password confirmed\n" << std::endl;
+					std::cout << YEL << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
 					cli->setRegistered(true);
 					sendResponse(G_PASSWORD, cli->getFd()); 
 					return (1);
@@ -35,8 +35,7 @@ int	Server::clientPasswordVerify(Client *cli, std::vector<std::string>	splited_c
 	}
 	cli->decrementPasswordTrials();
 	if (cli->getPasswordTrials() <= 0) {
-		epoll_ctl(epfd, EPOLL_CTL_DEL, cli->getFd(), 0);
-		removeClient(cli->getFd());
+		removeClientInstance(cli->getFd());
 	} 
 	return (0);
 }
@@ -77,7 +76,11 @@ int Server::clientNickName(Client *cli, std::vector<std::string> splited_cmd) {
 
 int Server::clientUserName(Client *cli, std::vector<std::string> splited_cmd) {
 	std::vector<std::string> temp_vec;
-	
+
+	if((splited_cmd.size() < 5)) {
+		sendResponse(ERR_NOTENOUGHPARAM(cli->getNickName()), cli->getFd());
+		return (0); 
+	}	
 	if (splited_cmd[0] == "USER") {
 		if (splited_cmd[4][0] == ':' || splited_cmd[4] == ":") {
 			for (int i = 0; i < 4; i++) {
@@ -85,14 +88,16 @@ int Server::clientUserName(Client *cli, std::vector<std::string> splited_cmd) {
 			}
 			std::string temp = getColonMessage(4, splited_cmd);
 			temp_vec.push_back(temp);
-			if (cli->getRegistered()) {
-				if (set_username(temp_vec, cli)) {
-					if (!confirmClientInfo(cli))
-						return (0);
-					return (1);
-				}
+		}
+		else if (splited_cmd.size() == 5)
+			temp_vec = splited_cmd;
+		if (cli->getRegistered()) {
+			if (set_username(temp_vec, cli)) {
+				if (!confirmClientInfo(cli))
+					return (0);
+				return (1);
 			}
-		}	
+		}
 	}
 	sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), cli->getFd());
 	return (0);
