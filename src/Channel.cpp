@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 03:26:55 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:20:28 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,26 +190,45 @@ void	Channel::add_admin(Client newClient) {
 	// add_client(newClient);
 }
 
-void	Channel::remove_client(int fd) {
+int		Channel::remove_client(int fd) {
 	for (std::vector<Client>::iterator	it = _clients.begin(); it != _clients.end(); ++it) {
-		if (it->getFd() == fd)
-			{_clients.erase(it); break;}
+		if (it->getFd() == fd) {
+			_clients.erase(it);
+			return(1);
+		}
 	}
+	return (0);
 }
 
-void	Channel::remove_admin(int fd) {
-    for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end(); ) {
+int		Channel::remove_admin(int fd) {
+    for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end();) {
         if (it->getFd() == fd) {
 			_admins.erase(it);
 			if (_admins.empty() && !_clients.empty()) {
-				_admins.push_back(_clients.front());
+				change_clientssToAdmin(_clients.front().getNickName());
 			}
-			break;
+			return (1);
 		} else {
 			++it;
 		}
 	}
+	return (0);
 }
+
+bool	Channel::change_clientssToAdmin(std::string nick) {
+	size_t i = 0;
+	for (; i < _clients.size(); i++) {
+		if (_clients[i].getNickName() == nick)
+			break;
+	}
+	if (i < _clients.size()) {
+		_admins.push_back(_clients[i]);
+		_clients.erase(i + _clients.begin());
+		return true;
+	}
+	return false;
+}
+
 
 bool	Channel::change_clientToAdmin(std::string& nick) {
 	size_t i = 0;

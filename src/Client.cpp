@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 02:44:06 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:46:11 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@ Client::Client()
       _nickbool(false), 
       _logedin(false), 
       _passwordTrials(3),
-      _isOperator(false), 
+      _isOperator(false),
+	  _usernameState(false),
       _nickname(""), 
-      _username(""), 
+      _username(""),
+	  _channels(),
+	  _channelIsInvite(),
       _ipadd("") {
 }
 
@@ -33,10 +36,14 @@ Client::Client(const Client& other)
 		_passwordVerified(other._passwordVerified),
 		_username(other._username),
 		_nickname(other._nickname),
+		_usernameState(other._usernameState),
 		_ipadd(other._ipadd),
 		_nickbool(other._nickbool),
 		_channels(other._channels),
-      _channelIsInvite(other._channelIsInvite) {}
+      _channelIsInvite(other._channelIsInvite) 
+	{
+		// *this = other;
+	}
 
 Client& Client::operator=(const Client& other) {
     if (this != &other) {
@@ -48,6 +55,7 @@ Client& Client::operator=(const Client& other) {
         this->_passwordVerified = other._passwordVerified;
         this->_username = other._username;
         this->_nickname = other._nickname;
+        this->_usernameState = other._usernameState;
         this->_ipadd = other._ipadd;
         this->_nickbool = other._nickbool;
         this->_channels = other._channels;
@@ -60,12 +68,13 @@ Client::~Client(){}
 
 /*GETTERS*/
 
+bool			Client::getUserstate() { return this->_usernameState; }
+
 int				Client::getFd() { return this->_fd; }
 bool			Client::getRegistered() { return this->_registered; }
 bool			Client::getLogedIn() { return this->_logedin; }
 std::string		Client::getNickName() { return this->_nickname; }
 std::string		Client::getUserName() { return this->_username; }
-// std::string		Client::getBuffer() { return _buffer; }
 std::string		Client::getIpAdd() { return _ipadd; }
 
 std::string		Client::getHostname() {
@@ -90,6 +99,9 @@ int 		Client::getPasswordTrials() const { return _passwordTrials; }
 
 /*SETTERS*/
 // void		Client::setBuffer(std::string received) { _buffer += received; }
+void		Client::setUserstate(bool value) { this->_usernameState = value; }
+
+
 void		Client::setRegistered(bool value) { this->_registered = value; }
 void		Client::setNickName(std::string &nickname) { this->_nickname = nickname; }
 void		Client::setUsername(std::string &username) { this->_username = username; }

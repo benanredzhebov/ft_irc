@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 02:06:55 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 21:11:00 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,20 @@ int Server::_run_server() {
 	return (1);
 }
 
-int		Server::searchForClients(std::string nickname) {
-	Client *cli;
+// int	Server::searchForClients(std::string nickname) {
+// 	Client *cli;
 
-	cli = getClientNick(nickname);
-	return (cli->getChannelSize());
-}
-
-// int Server::searchForClients(std::string nickname)
-// {
-// 	int count = 0;
-// 	for (size_t i = 0; i < this->_channels.size(); i++)
-// 	{
-// 		if (this->_channels[i].getClientInChannel(nickname))
-// 			count++;
-// 	}
-// 	return count;
+// 	cli = getClientNick(nickname);
+// 	return (cli->getChannelSize());
 // }
+
+int	Server::searchForClients(std::string nickname)
+{
+	int count = 0;
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i].getClientInChannel(nickname))
+			count++;
+	}
+	return count;
+}

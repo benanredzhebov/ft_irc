@@ -6,15 +6,16 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/02 03:02:38 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 00:24:10 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
-void	Server::close_fds(int fd){
-	if (fd >= 0)
+void	Server::close_fds(int fd) {
+	if (fd >= 0){
 		close(fd);
+	}
 }
 
 epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
@@ -24,22 +25,44 @@ epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
 	return (events);
 }
 
-void	Server::removeClientInstance(int fd) {
-	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-    	if (it->getFd() == fd) {
-    	    _clients.erase(it);
-    	    break;
-    	}
-	}
+// void	Server::removeClientInstance(int fd) {
+// 	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
+// 	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+//     	if (it->getFd() == fd) {
+//     	    _clients.erase(it);
+//     	    break;
+//     	}
+// 	}
+// }
+
+void Server::removeClientInstance(int fd) {
+    epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
+    for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ) {
+        if (it->getFd() == fd) {
+            it = _clients.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
+void		Server::sendAllClient(std::string message) {
+	for(size_t i = 0; i < _clients.size(); i++) {
+		sendResponse(message, _clients[i].getFd());
+	}
+	std::cout << "\n DEBUG :done and sending to server\n";
+	if (_server_fdsocket)
+		sendResponse(message, _server_fdsocket);
+}
+
+//need to change the duplicate method i have in remove_admin (std::string &nick)
 void	Server::removeClientfromChannel(Client *cli) {
 	for (int i = 0; i < _channels.size(); i++) {
-		_channels[i].remove_admin(cli->getFd());
+		if (_channels[i].remove_admin(cli->getFd())){
+			continue ;
+		}
 		_channels[i].remove_client(cli->getFd());
 	}
-	removeClientInstance(cli->getFd());
 }
 
 int	Server::_setServerSocket() {
@@ -75,9 +98,12 @@ void Server::handleClientInput(Client* client) {
 	std::vector<std::string>	splited_cmd;
 	splited_cmd = spliting_cmd(client);
 
+	if (!client)
+		return ;
 	if (splited_cmd.empty()) {
 		std::cout << RED << "Client fd [" << client->getFd() << "] disconnected" << RESET << std::endl;
-		removeClientfromChannel(client);
+		// removeClientfromChannel(client);
+		removeClientInstance(client->getFd());
 		close_fds(client->getFd());
 		return ;
 	}
@@ -105,11 +131,12 @@ void Server::handleClientInput(Client* client) {
 		else if(splited_cmd[0] == "TOPIC"){
 			TOPIC(splited_cmd, client);
 		}
+		else if(splited_cmd[0] == "MODE"){
+			std::string	temp = concatenateVector(splited_cmd);
+			MODE(temp, client->getFd());
+		}
 		// else if(splited_cmd[0] == "QUIT") {
 		// 	signalHandler();
-		// }
-		// else if(splited_cmd[0] == "MODE"){
-			
 		// }
 	}
 }

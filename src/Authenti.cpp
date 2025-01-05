@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 02:16:33 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:45:39 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,8 @@ int	Server::set_username(std::vector<std::string> splited_cmd, Client *cli)
 		sendResponse(ERR_ERRONEUSNICK(std::string(splited_cmd[1])), cli->getFd());
 		return (0);
 	}
-	if(cli && cli->getRegistered()) {
+	if(cli && cli->getRegistered() && !cli->getUserstate()) {
+		cli->setUserstate(true);
 		cli->setUsername(splited_cmd[1]);
 		sendResponse(USER_SET, cli->getFd());
 		return (1);

@@ -74,8 +74,12 @@ class Channel {
 		/*METHODS*/
 		void		add_client(Client newClient); // Add client to channel
 		void		add_admin(Client newClient); // Add admin to channel
-		void		remove_client(int fd); // Remove client by file descriptor
-		void		remove_admin(int fd);  // Remove admin by file descriptor
+		
+		int			remove_client(int fd); // Remove client by file descriptor
+		int			remove_admin(int fd);  // Remove admin by file descriptor
+		
+		bool		change_clientssToAdmin(std::string nick);
+		
 		bool		change_clientToAdmin(std::string& nick); // Change client to admin
 		bool		change_adminToClient(std::string& nick); // Change admin to client
 

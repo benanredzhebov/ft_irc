@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/02 02:01:27 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:56:47 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ std::vector<std::string>	spliting_cmd(Client *cli) {
 			return vec;
 		}
 		buffer[bytes] = '\0';
+		if (buffer[0] == '\n')
+			continue ;
 		temp_buffer.append(buffer);
 		if (temp_buffer.find('\n') != std::string::npos)
 			break ;

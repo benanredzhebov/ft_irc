@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:45:20 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/23 18:05:01 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 00:26:36 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ Server::Server(int port, const std::string& password)
 }
 
 Server::~Server() {
+	// should probably remove all client fd from here , probably not neccasary tho , 
+	std::stringstream ss;
+	ss << RED << "SERVER [" << _server_fdsocket << "] Terminated\n" << RESET;
+	std::string message = ss.str();
+	sendAllClient(message);
 	if (_server_fdsocket >= 0) {
 	    close_fds(_server_fdsocket);
 	}
 	if (epfd >= 0) {
 		close_fds(epfd);
 	}
-	std::cout << "Server object destructed." << std::endl;
 }
 
 Server::Server(const Server &other)

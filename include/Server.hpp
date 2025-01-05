@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 00:25:51 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 23:40:45 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class Server {
 		std::string							_password;
 		epoll_event							client_event;
 		epoll_event							server_event;
+
 		std::vector<Channel>				_channels;
 		std::vector<Client>					_clients;
 		std::vector<struct epoll_event>		_fds;
@@ -68,12 +69,14 @@ class Server {
 		Server &operator=(const Server &other);
 
 		static bool	isBotfull;
-		
+		void			addClient(Client newClient);
+
+		void			sendAllClient(std::string message);
+	
 		Client			*getClient(int fd);
 		Client			*getClientNick(std::string nickname);
 		Channel			*getChannel(std::string name);
 		
-		void			addClient(Client newClient);
 		void			removeClientInstance(int fd);
 		void			removeClientfromChannel(Client *cli);
 		void			sendResponse(std::string response, int fd); 
@@ -91,6 +94,21 @@ class Server {
 		epoll_event		initEpollEvant(int poll_mode, int fd);
 		
 		
+		/*MODE CMD*/
+		void		MODE(std::string &cmd, int fd); // Handle MODE command
+		std::string invite_only(Channel *channel, char opera, std::string chain); // Handle invite-only mode
+		std::string topic_restriction(Channel *channel ,char opera, std::string chain); // Handle topic restriction mode
+		std::string password_mode(std::vector<std::string> splited, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments); // Handle password mode
+		std::string operator_privilege(std::vector<std::string> splited, Channel *channel, size_t& pos, int fd, char opera, std::string chain, std::string& arguments); // Handle operator privilege mode
+		std::string channel_limit(std::vector<std::string> splited, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments); // Handle channel limit mode
+		
+		
+		bool		isvalid_limit(std::string& limit); // Check if limit is valid
+		std::vector<std::string> splitParams(std::string params); // Split parameters
+		std::string mode_toAppend(std::string chain, char opera, char mode); // Append mode to chain
+		void 		getCmdArgs(std::string cmd,std::string& name, std::string& modeset ,std::string &params); // Get command arguments
+
+
 
 		int				resizeFds();
 	

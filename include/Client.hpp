@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 00:56:52 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:43:58 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Channel;
 
 class Client {
 	private:
+		bool						_usernameState;
 		int							_fd; // File descriptor for the client's socket
 		int							_passwordTrials; // Number of password trials
 		bool						_registered; // Flag indicating if the client is registered
@@ -41,6 +42,8 @@ class Client {
 		Client &operator=(const Client &other);
     	~Client();
 	
+	bool			getUserstate();
+	
 	int				getFd();
 	bool			getRegistered();
 	bool			getLogedIn(); // Check if the client is logged in
@@ -57,6 +60,9 @@ class Client {
 
 
 	/*SETTERS*/
+	void			setUserstate(bool value); // Set the nickname
+
+	
 	void			setNickName(std::string &nickname); // Set the nickname
 	void			nickSet(bool value);
 	void			setUsername(std::string &username); // Set the username
