@@ -8,22 +8,20 @@ class Client;
 
 class Channel {
 	private:
-		int									_invit_only; // Invitation-only flag
-		int									_topic; // Topic of the channel
-		int									_key; // Key for the channel (password)
-		int									_limit; // Limit on the number of clients
-		bool								_topic_restriction; // Topic restriction flag
-		std::string							_name; // Name of the channel
-		std::string							_time_creation; // Time of channel creation
-		std::string							_password; // Password for the channel
-		std::string							_created_at; // Creation timestamp
-		std::string							_topic_name; // Name of the topic
+		int									_invit_only;
+		int									_topic;
+		int									_key;
+		int									_limit;
+		bool								_topic_restriction;
+		std::string							_name;
+		std::string							_time_creation;
+		std::string							_password;
+		std::string							_created_at;
+		std::string							_topic_name;
+		std::vector<Client>					_clients;
+		std::vector<Client>					_admins;
+		std::vector<std::pair<char, bool> >	_modes;
 
-		std::vector<Client>					_clients; // List of clients in the channel
-
-		
-		std::vector<Client>					_admins; // List of admins in the channel
-		std::vector<std::pair<char, bool> >	_modes; // List of modes and their statuses
 
 
 	public:
@@ -33,59 +31,53 @@ class Channel {
 		Channel &operator=(const Channel &other);
 
 		/*SETTERS*/
-		void		setInvitOnly(int invit_only); // Set invitation-only flag
-		void		setTopic(int topic); // Set topic
-		void		setKey(int key); // Set key (password)
-		void		setLimit(int limit); // Set client limit
-		void		setTopicName(std::string topic_name); // Set topic name
-		void		setPassword(std::string password); // Set password
-		void		setName(std::string name); // Set channel name
-		void		setTime(std::string time); // Set time
-		void		set_topicRestriction(bool value); // Set topic restriction flag
-		void		setModeAtindex(size_t index, bool mode); // Set mode at index
-		void		set_createiontime(); // Set creation time
+		void		setInvitOnly(int invit_only);
+		void		setTopic(int topic);
+		void		setKey(int key);
+		void		setLimit(int limit);
+		void		setTopicName(std::string topic_name);
+		void		setPassword(std::string password);
+		void		setName(std::string name);
+		void		setTime(std::string time);
+		void		set_topicRestriction(bool value);
+		void		setModeAtindex(size_t index, bool mode);
+		void		set_createiontime();
 
 		
 		
-		int			checkClientExistence(int fd);
 		/*GETTERS*/
 		int			getAdminSize();
-
-
-		int			getInvitOnly(); // Get invitation-only flag
-		int			getTopic(); // Get topic
-		int			getKey(); // Get key (password)
-		int			getLimit(); // Get client limit
-		int			getClientsNumber(); // Get number of clients
-		bool		gettopic_restriction() const; // Get topic restriction flag
-		bool		getModeAtindex(size_t index); // Get mode at index
-		bool		clientInChannel(std::string &nick); // Check if client is in channel
-		std::string	getTopicName(); // Get topic name
-		std::string	GetPassword(); // Get password
-		std::string	getName(); // Get channel name
-		std::string	getTime(); // Get time
-		std::string	get_creationtime(); // Get creation time
-		std::string	getModes(); // Get modes
-		std::string	clientChannel_list(); // Get client channel list
-		Client		*get_client(int fd); // Get client by file descriptor
-		Client		*get_admin(int fd); // Get admin by file descriptor
-		Client		*getClientInChannel(std::string name); // Get client in channel by name
+		int			getInvitOnly();
+		int			getTopic();
+		int			getKey();
+		int			getLimit();
+		int			getClientsNumber();
+		bool		gettopic_restriction() const;
+		bool		getModeAtindex(size_t index);
+		bool		clientInChannel(std::string &nick);
+		Client		*get_client(int fd);
+		Client		*get_admin(int fd);
+		Client		*getClientInChannel(std::string name);
+		std::string	getTopicName();
+		std::string	GetPassword();
+		std::string	getName();
+		std::string	getTime();
+		std::string	get_creationtime();
+		std::string	getModes();
+		std::string	clientChannel_list();
 
 		/*METHODS*/
-		void		add_client(Client newClient); // Add client to channel
-		void		add_admin(Client newClient); // Add admin to channel
-		
-		int			remove_client(int fd); // Remove client by file descriptor
-		int			remove_admin(int fd);  // Remove admin by file descriptor
-		
+		void		add_client(Client newClient);
+		void		add_admin(Client newClient);
+		int			remove_client(int fd);
+		int			remove_admin(int fd);
 		bool		change_clientssToAdmin(std::string nick);
-		
-		bool		change_clientToAdmin(std::string& nick); // Change client to admin
-		bool		change_adminToClient(std::string& nick); // Change admin to client
+		bool		change_clientToAdmin(std::string& nick);
+		bool		change_adminToClient(std::string& nick);
+		void		sendTo_all(std::string rpl1);
+		void		sendTo_all(std::string rpl1, int fd);
+		int			checkClientExistence(int fd);
 
-		/*SEND TO ALL*/
-		void		sendTo_all(std::string rpl1); // Send message to all clients
-		void		sendTo_all(std::string rpl1, int fd); // Send message to all clients except one
 };
 
 #endif

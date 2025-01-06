@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 22:46:11 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 10:36:27 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Client::Client()
       _nickname(""), 
       _username(""),
 	  _channels(),
-	  _channelIsInvite(),
+	//   _channelIsInvite(),
       _ipadd("") {
 }
 
@@ -39,11 +39,9 @@ Client::Client(const Client& other)
 		_usernameState(other._usernameState),
 		_ipadd(other._ipadd),
 		_nickbool(other._nickbool),
-		_channels(other._channels),
-      _channelIsInvite(other._channelIsInvite) 
-	{
-		// *this = other;
-	}
+		_channels(other._channels)
+    //   _channelIsInvite(other._channelIsInvite) 
+	{}
 
 Client& Client::operator=(const Client& other) {
     if (this != &other) {
@@ -59,7 +57,7 @@ Client& Client::operator=(const Client& other) {
         this->_ipadd = other._ipadd;
         this->_nickbool = other._nickbool;
         this->_channels = other._channels;
-        this->_channelIsInvite = other._channelIsInvite;
+        // this->_channelIsInvite = other._channelIsInvite;
     }
     return *this;
 }
@@ -84,13 +82,13 @@ std::string		Client::getHostname() {
 
 int				Client::getChannelSize() const { return _channels.size(); }
 
-bool			Client::getInviteChannel(std::string &chName) {
-    for (size_t i = 0; i < this->_channelIsInvite.size(); i++) {
-        if (this->_channelIsInvite[i] == chName)
-            return true;
-    }
-    return false;
-}
+// bool			Client::getInviteChannel(std::string &chName) {
+//     for (size_t i = 0; i < this->_channelIsInvite.size(); i++) {
+//         if (this->_channelIsInvite[i] == chName)
+//             return true;
+//     }
+//     return false;
+// }
 
 bool		Client::nickGet() {return this->_nickbool;}
 void		Client::decrementPasswordTrials() { _passwordTrials--; }

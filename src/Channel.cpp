@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 22:20:28 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:07:37 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,5 @@ int Channel::checkClientExistence(int fd) {
 			return (1);
 		}
 	}
-	std::cout << "checking = " << fd << std::endl;
 	return (0);
 }

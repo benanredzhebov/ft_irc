@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 23:40:45 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:08:42 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 #define GRE "\e[1;32m"
 #define YEL "\e[1;33m"
 #define RESET "\e[0m"
-#define DEBUG 0
+#define DEBUG 1
 
 
 class Client;
@@ -58,7 +58,6 @@ class Server {
 		std::string							_password;
 		epoll_event							client_event;
 		epoll_event							server_event;
-
 		std::vector<Channel>				_channels;
 		std::vector<Client>					_clients;
 		std::vector<struct epoll_event>		_fds;
@@ -69,10 +68,9 @@ class Server {
 		Server &operator=(const Server &other);
 
 		static bool	isBotfull;
-		void			addClient(Client newClient);
-
+		// void			addClient(Client newClient);
+		int				resizeFds();
 		void			sendAllClient(std::string message);
-	
 		Client			*getClient(int fd);
 		Client			*getClientNick(std::string nickname);
 		Channel			*getChannel(std::string name);
@@ -100,19 +98,15 @@ class Server {
 		std::string topic_restriction(Channel *channel ,char opera, std::string chain); // Handle topic restriction mode
 		std::string password_mode(std::vector<std::string> splited, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments); // Handle password mode
 		std::string operator_privilege(std::vector<std::string> splited, Channel *channel, size_t& pos, int fd, char opera, std::string chain, std::string& arguments); // Handle operator privilege mode
-		std::string channel_limit(std::vector<std::string> splited, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments); // Handle channel limit mode
-		
-		
+		std::string channel_limit(std::vector<std::string> splited, Channel *channel, size_t &pos, char opera, int fd, std::string chain, std::string& arguments); // Handle channel limit mode	
 		bool		isvalid_limit(std::string& limit); // Check if limit is valid
 		std::vector<std::string> splitParams(std::string params); // Split parameters
 		std::string mode_toAppend(std::string chain, char opera, char mode); // Append mode to chain
 		void 		getCmdArgs(std::string cmd,std::string& name, std::string& modeset ,std::string &params); // Get command arguments
 
-
-
-		int				resizeFds();
+		
 	
-		/*CMD*/
+		/*	CMD	*/
 		void	QUIT(std::string cmd, int fd); // Handle QUIT command
 		
 		void			KICK(std::string cmd, int fd); // Handle KICK command
@@ -121,14 +115,15 @@ class Server {
 		void			INVITE(std::vector<std::string> splited_cmd, Client *client);
 		void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
 
-		/* CMD_UTILS*/
-		int				splitJoin(std::vector<std::pair<std::string, std::string> > &token, std::vector<std::string> splited_cmd);
-		void			newChannelCreate(std::string chName, std::string chPass, Client *cli); // Handle non-existing channel
-		void			existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd); // Handle existing channel
-		int				searchForClients(std::string nickname); // Search for clients by nickname
-		std::string		splitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd); // Split KICK command
+		/*	CMD_UTILS	*/
+		int				splitJoin(std::vector<std::pair<std::string, std::string> > &token,
+						std::vector<std::string> splited_cmd);
+		void			newChannelCreate(std::string chName, std::string chPass, Client *cli);
+		void			existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd);
+		int				searchForClients(std::string nickname);
+		std::string		splitCmdKick(std::string cmd, std::vector<std::string> &tmp, std::string &user, int fd);
 
-		/*AUTHENTIFICATION METHODS*/
+		/*	AUTHENTIFICATION METHODS	*/
 		int				clientPasswordVerify(Client *cli, std::vector<std::string> splited_cmd);
 		void			handleClientInput(Client* client);
 		int				clientNickName(Client *cli, std::vector<std::string> splited_cmd);
@@ -142,6 +137,7 @@ class Server {
 		bool			is_validUserName(std::string &username);
 };
 
+/*	helper functions used	*/
 std::string					toUpper(const std::string& str);
 std::string					trim(const std::string& str);
 std::string					getColonMessage(int x, std::vector<std::string> str);

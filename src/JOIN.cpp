@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/02 03:31:20 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:07:13 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token,
 		return (1); 
 }
 
-bool IsInvited(Client *cli, std::string ChName, int flag){
-	if(cli->getInviteChannel(ChName)){
-		if (flag == 1)
-			cli->rmChannelInvite(ChName);
-		return true;
-	}
-	return false;
-}
+// bool IsInvited(Client *cli, std::string ChName, int flag){
+// 	if(cli->getInviteChannel(ChName)){
+// 		if (flag == 1)
+// 			cli->rmChannelInvite(ChName);
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, int i, int j, int fd)
 {
@@ -71,13 +71,15 @@ void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, in
 		return ;
 	}
 	if (!this->_channels[j].GetPassword().empty() && this->_channels[j].GetPassword() != token[i].second) {
-		if (!IsInvited(getClient(fd), token[i].first, 0)) {
+		// if (!IsInvited(getClient(fd), token[i].first, 0)) 
+		{
 			sendResponse(ERR_BADCHANNELKEY(getClient(fd)->getNickName(), token[i].first), fd);
 			return ;
 		}
 	}
 	if (this->_channels[j].getInvitOnly()){
-		if (!IsInvited(getClient(fd), token[i].first, 1)) {	
+		// if (!IsInvited(getClient(fd), token[i].first, 1))
+		{	
 			sendResponse(ERR_INVITEONLYCHAN(getClient(fd)->getNickName(), token[i].first), fd);
 			return ;
 		}
@@ -109,12 +111,10 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 		std::cerr << "place holder for the max chanel and then return\n";
 		return ;
 	}
-	std::cerr << "here from new\n";
 	Channel newChannel;
 	newChannel.setName(chName);
 	if (chPass != "")
 		newChannel.setPassword(chPass);
-	// newChannel.add_client(*client); 
 	newChannel.add_admin(*client); // ensure the admin has been added to the channel
 	newChannel.set_createiontime(); //what was this ever used for ???
 	_channels.push_back(newChannel);
