@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 21:11:00 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 09:49:03 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ int Server::_run_server() {
 		if (resizeFds())
 			continue;
 		for (int i = 0; i < epoll_waitfd; i++) {
-			if (_fds[i].data.fd == _server_fdsocket) {
+			clientFD = _fds[i].data.fd;
+			if (clientFD == _server_fdsocket) {
 				clientFD = _serverAcceptIncoming();
 				if (clientFD < 0){
 					continue ;
@@ -107,22 +108,17 @@ int Server::_run_server() {
 				_clients.push_back(newclient);
 			}
 			else {
-				clientFD = _fds[i].data.fd;
 				Client *cli = getClient(clientFD);
+				if (!cli) {
+					std::cerr << "Client FD " << clientFD << " not found in _clients. Skipping." << std::endl;
+					continue;
+				}
 				handleClientInput(cli);
 			}
 		}
 	}
-	close_fds(_server_fdsocket);
 	return (1);
 }
-
-// int	Server::searchForClients(std::string nickname) {
-// 	Client *cli;
-
-// 	cli = getClientNick(nickname);
-// 	return (cli->getChannelSize());
-// }
 
 int	Server::searchForClients(std::string nickname)
 {

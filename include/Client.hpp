@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 22:43:58 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 09:41:27 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ class Client {
 	std::string		getUserName(); // Get the username
 	bool			nickGet();
 	int				getChannelSize() const;
-	std::string		getBuffer(); // Get the buffer
 	std::string		getIpAdd();
 	std::string		getHostname();
 	

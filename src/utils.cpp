@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/06 00:24:10 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/06 09:56:20 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,15 @@ epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
 	return (events);
 }
 
-// void	Server::removeClientInstance(int fd) {
-// 	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
-// 	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-//     	if (it->getFd() == fd) {
-//     	    _clients.erase(it);
-//     	    break;
-//     	}
-// 	}
-// }
-
 void Server::removeClientInstance(int fd) {
-    epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0);
+    if (epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0) == -1) {
+ 	   std::cerr << "Failed to remove fd " << fd << " from epoll: " << strerror(errno) << std::endl;
+	}
     for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ) {
         if (it->getFd() == fd) {
+			close_fds(fd);
             it = _clients.erase(it);
+			return ;
         } else {
             ++it;
         }
@@ -50,9 +44,6 @@ void		Server::sendAllClient(std::string message) {
 	for(size_t i = 0; i < _clients.size(); i++) {
 		sendResponse(message, _clients[i].getFd());
 	}
-	std::cout << "\n DEBUG :done and sending to server\n";
-	if (_server_fdsocket)
-		sendResponse(message, _server_fdsocket);
 }
 
 //need to change the duplicate method i have in remove_admin (std::string &nick)
@@ -102,9 +93,8 @@ void Server::handleClientInput(Client* client) {
 		return ;
 	if (splited_cmd.empty()) {
 		std::cout << RED << "Client fd [" << client->getFd() << "] disconnected" << RESET << std::endl;
-		// removeClientfromChannel(client);
+		removeClientfromChannel(client);
 		removeClientInstance(client->getFd());
-		close_fds(client->getFd());
 		return ;
 	}
 	if(splited_cmd[0] == "PASS")
