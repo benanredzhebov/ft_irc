@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 09:40:33 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:52:33 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ int	Server::confirmClientInfo(Client *cli) {
 }
 
 int Server::clientNickName(Client *cli, std::vector<std::string> splited_cmd) {
-	if (!cli->getRegistered())
+	if (!cli || !cli->getRegistered()){
 		return (0);
+	}
 	if (splited_cmd.size() == 2) {
 		if (splited_cmd[0] == "NICK") {
 			if (cli->getRegistered()) {

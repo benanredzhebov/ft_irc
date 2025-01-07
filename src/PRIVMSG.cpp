@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2024/12/29 13:30:15 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:24:32 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,28 @@ int	splitPrivMsg_utils(std::vector<std::pair<std::string, std::string> > &token,
 	return (1);
 }
 
-std::string composeMessage(const std::string &command, const std::string &message,
-							const std::string &nick, const std::string &target) {
-	std::string temp;
+// std::string composeMessage(const std::string &command, const std::string &message,
+// 							const std::string &nick, const std::string &target) {
+// 	std::string temp;
 
-	temp = ":" + nick + "!" + nick + "@localhost " + command + " " + target + " :" + message + "\n";
-	return (temp);
+// 	temp = ":" + nick + "!" + nick + "@localhost " + command + " " + target + " :" + message + "\n";
+// 	// temp = ":" + client->getNickName() + "!~" + client->getUserName() + "@localhost " + command + " " + target + " :" + message + "\r\n";
+// 	return (temp);
+// }
+
+std::string Server::composeMessage(int fd, const std::string &command, const std::string &message, const std::string &target) {
+    std::string temp;
+    Client* client = getClient(fd); // Use getClient to retrieve the Client object
+
+    if (client) {
+        temp = ":" + client->getNickName() + "!~" + client->getUserName() + "@localhost " + command + " " + target + " :" + message + "\r\n";
+    } else {
+        // Handle the case where the client is not found
+		temp = ":unknown!~unknown@localhost " + command + " " + target + " :" + message + "\r\n";
+    }
+
+    return temp;
 }
-
 
 int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 	std::vector<std::pair<std::string, std::string> > token;
@@ -76,8 +90,9 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 	}
 	for (size_t i = 0; i < token.size(); ++i) {
 		tmp = token[i].first;
-		std::string message = composeMessage(splited_cmd[0], token[i].second,
-										client->getNickName(), tmp);
+		// std::string message = composeMessage(splited_cmd[0], token[i].second,
+		// 								client->getNickName(), tmp);
+		std::string message = composeMessage(client->getFd(), splited_cmd[0], token[i].second, tmp);
 		if (tmp[i] == '#') {
 			Channel	*channel;
 			channel = getChannel(tmp);
@@ -95,6 +110,6 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 				sendResponse(ERR_NOSUCHNICK(client->getNickName(), tmp), client->getFd());	
 			}
 		}
-    }
+	}
 	return (1);
 }

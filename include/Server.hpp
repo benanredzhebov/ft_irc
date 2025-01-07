@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 09:25:47 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:20:20 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ class Server {
 		
 		void			KICK(std::string cmd, int fd); // Handle KICK command
 		int				PRIVMSG(std::vector<std::string> splited_cmd, Client *client);
+		std::string 	composeMessage(int fd, const std::string &command, const std::string &message, const std::string &target);
 		int				JOIN(std::vector<std::string> splited_cmd, Client *client);
 		void			INVITE(std::vector<std::string> splited_cmd, Client *client);
 		void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
