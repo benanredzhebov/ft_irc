@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Authenti.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/05 22:45:39 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:40:33 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	Server::clientPasswordVerify(Client *cli, std::vector<std::string>	splited_c
 		if (splited_cmd[0] == "PASS") {
 			if (!cli->getRegistered()) {
 				if (_password == splited_cmd[1]) {
-					std::cout << YEL << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
+					std::cout << GRE << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
 					cli->setRegistered(true);
 					sendResponse(G_PASSWORD, cli->getFd()); 
 					return (1);

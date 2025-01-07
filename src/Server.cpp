@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 09:49:03 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 08:42:25 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
+/*Used to listen for incoming connections from clients*/
 int Server::_creatingServerSocketFd(){
 	_server_fdsocket = socket(AF_INET6, SOCK_STREAM, 0);
 	if (_server_fdsocket < 0 ){
-		std::cout << "socket creation faliled\n" << std::endl;
+		std::cout << "socket creation failed\n" << std::endl;
 		return (0);
 	}
 	return (1);
@@ -34,7 +35,7 @@ int Server::_serverReservePortandIpBind(){
 		return (0);
     }
 	if (bind(_server_fdsocket, (const struct sockaddr *)&address, sizeof(address)) < 0){
-		return (std::cout << "binding faliled\n" << std::endl, 0);
+		return (std::cout << "binding failed\n" << std::endl, 0);
 	}
 	return (1);
 
@@ -42,7 +43,7 @@ int Server::_serverReservePortandIpBind(){
 
 int Server::_serverListens() {
 	if (listen(_server_fdsocket, SOMAXCONN) < 0) {
-		std::cout << "lsiten faliled\n" << std::endl;
+		std::cout << "listen failed\n" << std::endl;
 		return (0);
 	}
 	return (1);

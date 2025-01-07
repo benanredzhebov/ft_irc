@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/06 09:56:20 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:27:00 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	Server::resizeFds() {
 	return (0);
 }
 
-std::string concatenateVector(const std::vector<std::string> &splited_cmd) {
+std::string Server::concatenateVector(const std::vector<std::string> &splited_cmd) {
     std::string result;
     for (size_t i = 0; i < splited_cmd.size(); ++i) {
         if (!result.empty()) {
@@ -85,9 +85,22 @@ std::string concatenateVector(const std::vector<std::string> &splited_cmd) {
     return result;
 }
 
+std::string Server::concatenateVector(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end) {
+    std::string result;
+	for (std::vector<std::string>::const_iterator it = begin; it != end; ++it) {
+        if (!result.empty()) {
+            result += " ";
+        }
+        result += *it;
+    }
+    return result;
+}
+
 void Server::handleClientInput(Client* client) {
 	std::vector<std::string>	splited_cmd;
 	splited_cmd = spliting_cmd(client);
+
+	std::cout << YEL << "Input: " << concatenateVector(splited_cmd) << RESET << std::endl;
 
 	if (!client)
 		return ;
@@ -125,8 +138,8 @@ void Server::handleClientInput(Client* client) {
 			std::string	temp = concatenateVector(splited_cmd);
 			MODE(temp, client->getFd());
 		}
-		// else if(splited_cmd[0] == "QUIT") {
-		// 	signalHandler();
-		// }
+		else if(splited_cmd[0] == "QUIT") {
+			QUIT(client, splited_cmd);
+		}
 	}
 }

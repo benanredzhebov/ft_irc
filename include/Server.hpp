@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:08:42 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:25:47 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ class Server {
 		
 	
 		/*	CMD	*/
-		void	QUIT(std::string cmd, int fd); // Handle QUIT command
+		void			QUIT(Client *client, const std::vector<std::string>& splited_cmd);
+		void			sendQuitMessage(Client *client, const std::string& message);
 		
 		void			KICK(std::string cmd, int fd); // Handle KICK command
 		int				PRIVMSG(std::vector<std::string> splited_cmd, Client *client);
@@ -116,6 +117,8 @@ class Server {
 		void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
 
 		/*	CMD_UTILS	*/
+		std::string 	concatenateVector(const std::vector<std::string> &splited_cmd);
+		std::string 	concatenateVector(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end);
 		int				splitJoin(std::vector<std::pair<std::string, std::string> > &token,
 						std::vector<std::string> splited_cmd);
 		void			newChannelCreate(std::string chName, std::string chPass, Client *cli);
