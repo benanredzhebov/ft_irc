@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:08:42 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:40:41 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 #define GRE "\e[1;32m"
 #define YEL "\e[1;33m"
 #define RESET "\e[0m"
-#define DEBUG 1
+#define DEBUG 0
 
 
 class Client;

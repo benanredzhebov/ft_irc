@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/06 09:56:20 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:53:53 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ void	Server::removeClientfromChannel(Client *cli) {
 		if (_channels[i].remove_admin(cli->getFd())){
 			continue ;
 		}
-		_channels[i].remove_client(cli->getFd());
+		if (_channels[i].remove_client(cli->getFd())){
+			_channels[i].sendTo_all(CLIOUT(cli->getNickName(), _channels[i].getName()));
+		}
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:07:13 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:42:10 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 	newChannel.setName(chName);
 	if (chPass != "")
 		newChannel.setPassword(chPass);
-	newChannel.add_admin(*client); // ensure the admin has been added to the channel
+	newChannel.add_admin(*client);
 	newChannel.set_createiontime(); //what was this ever used for ???
 	_channels.push_back(newChannel);
     sendResponse(RPL_JOINMSG(client->getHostname(), client->getIpAdd(), chName), client->getFd());
@@ -132,7 +132,7 @@ int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {
 	}
 	if (DEBUG) {
 		for (size_t i = 0; i < token.size(); ++i) {
-			std::cout << "Key: " << token[i].first << "\n ";
+			std::cout << "Key11: " << token[i].first << "\n ";
 			std::cout << "Value: " << token[i].second << std::endl;
 		}
 	}

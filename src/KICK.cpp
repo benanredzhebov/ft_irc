@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:00:59 by beredzhe          #+#    #+#             */
-/*   Updated: 2024/12/28 09:08:17 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:22:49 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ Channel* Server::getChannel(std::string name) {
 
 void	Server::KICK(std::string cmd, int fd)
 {
-	//ERR_BADCHANMASK (476) // if the channel mask is invalid
 	std::vector<std::string> tmp;
 	std::string reason ,user;
 	reason = splitCmdKick(cmd, tmp, user, fd);
@@ -91,28 +90,26 @@ void	Server::KICK(std::string cmd, int fd)
 		sendResponse(ERR_NOTENOUGHPARAM(getClient(fd)->getNickName()) , fd);
 		return;
 	}
-	for (int i = 0; i < tmp.size(); i++) {
-		std::cout << "value = " << tmp[i] << std::endl;
-	}
-	for (size_t i = 0; i < tmp.size(); i++){ // search for the channel
-		if (getChannel(tmp[i])){// check if the channel exist
+	for (size_t i = 0; i < tmp.size(); i++){
+		if (getChannel(tmp[i])){
 			Channel *ch = getChannel(tmp[i]);
 			if (!ch->get_client(fd) && !ch->get_admin(fd)) {
 				sendResponse(ERR_NOTONCHANNEL(getClient(fd)->getNickName(), tmp[i]) , fd);
 				continue;
 			}
-			if(ch->get_admin(fd)) { // check if the client is admin
-				if (ch->getClientInChannel(user)) { // check if the client to kick is in the channel
+			if(ch->get_admin(fd)) { 
+				if (ch->getClientInChannel(user)) {
 					std::stringstream ss;
-					ss << ":" << getClient(fd)->getNickName() << "!~" << getClient(fd)->getUserName() << "@" << "localhost" << " KICK #" << tmp[i] << " " << user;
+					ss << ":" << getClient(fd)->getNickName() << "!~" << getClient(fd)->getUserName() << "@" << "localhost" << " KICK " << tmp[i] << " " << user;
 					if (!reason.empty())
 						ss << " :" << reason << "\r\n";
 					else ss << "\r\n";
-					ch->sendTo_all(ss.str());
 					if (ch->get_admin(ch->getClientInChannel(user)->getFd()))
 						ch->remove_admin(ch->getClientInChannel(user)->getFd());
 					else
 						ch->remove_client(ch->getClientInChannel(user)->getFd());
+					sendResponse(CLIKICKOUT(getClient(fd)->getUserName(), user, tmp[i], reason), getClientNick(user)->getFd());
+					ch->sendTo_all(ss.str());
 					if (ch->getClientsNumber() == 0)
 						_channels.erase(_channels.begin() + i);
 				}
