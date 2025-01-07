@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:00:09 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 10:52:33 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:20:35 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,59 @@
 handles client authentication based on a command received from the client
 If the command is valid and the password matches, the client is marked as registered*/
 
-int	Server::clientPasswordVerify(Client *cli, std::vector<std::string>	splited_cmd) {
-	if (splited_cmd.size() == 2) {
-		if (splited_cmd[0] == "PASS") {
-			if (!cli->getRegistered()) {
-				if (_password == splited_cmd[1]) {
-					std::cout << GRE << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
-					cli->setRegistered(true);
-					sendResponse(G_PASSWORD, cli->getFd()); 
-					return (1);
-				}
-				else
-					sendResponse(ERR_INCORPASS(splited_cmd[1]), cli->getFd());
-			}
-			else
-				sendResponse(ERR_ALREADYREGISTERED(cli->getNickName()), cli->getFd());
-		}
+// int	Server::clientPasswordVerify(Client *cli, std::vector<std::string>	splited_cmd) {
+// 	if (splited_cmd.size() == 2) {
+// 		if (splited_cmd[0] == "PASS") {
+// 			if (!cli->getRegistered()) {
+// 				if (_password == splited_cmd[1]) {
+// 					std::cout << GRE << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
+// 					cli->setRegistered(true);
+// 					sendResponse(G_PASSWORD, cli->getFd()); 
+// 					return (1);
+// 				}
+// 				else
+// 					sendResponse(ERR_INCORPASS(splited_cmd[1]), cli->getFd());
+// 			}
+// 			else
+// 				sendResponse(ERR_ALREADYREGISTERED(cli->getNickName()), cli->getFd());
+// 		}
+// 	}
+// 	cli->decrementPasswordTrials();
+// 	if (cli->getPasswordTrials() <= 0) {
+// 		removeClientInstance(cli->getFd());
+// 	}
+// 	return (0);
+// }
+
+int Server::clientPasswordVerify(Client *cli, std::vector<std::string> splited_cmd) {
+	if (splited_cmd.size() != 2) {
+		sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), cli->getFd());
+		return 0;
 	}
-	cli->decrementPasswordTrials();
-	if (cli->getPasswordTrials() <= 0) {
-		removeClientInstance(cli->getFd());
-	} 
-	return (0);
+
+	if (splited_cmd[0] == "PASS") {
+		if (!cli->getRegistered()) {
+			if (_password == splited_cmd[1]) {
+				std::cout << GRE << "Client fd [" << cli->getFd() << "] password authenticated" << RESET << std::endl;
+				cli->setRegistered(true);
+				sendResponse(G_PASSWORD, cli->getFd());
+				return 1;
+			} else {
+				sendResponse(ERR_INCORPASS(splited_cmd[1]), cli->getFd());
+				cli->decrementPasswordTrials();
+				if (cli->getPasswordTrials() <= 0) {
+					removeClientInstance(cli->getFd());
+				}
+				return 0;
+			}
+		} else {
+			sendResponse(ERR_ALREADYREGISTERED(cli->getNickName()), cli->getFd());
+			return 0;
+		}
+	} else {
+		sendResponse(ERR_UNKNOWNCOMMAND(splited_cmd[0]), cli->getFd());
+		return 0;
+	}
 }
 
 int	Server::confirmClientInfo(Client *cli) {
@@ -50,17 +81,16 @@ int	Server::confirmClientInfo(Client *cli) {
 }
 
 int Server::clientNickName(Client *cli, std::vector<std::string> splited_cmd) {
-	if (!cli || !cli->getRegistered()){
-		return (0);
+	if (!cli || !cli->getRegistered()) {
+		return 0;
 	}
+
 	if (splited_cmd.size() == 2) {
 		if (splited_cmd[0] == "NICK") {
-			if (cli->getRegistered()) {
-				if (set_nickname(splited_cmd[1], cli)) {
-					if (!confirmClientInfo(cli))
-						return (0);
-					return (1);
-				}
+			if (set_nickname(splited_cmd[1], cli)) {
+				if (!confirmClientInfo(cli))
+					return (0);
+				return (1);
 			}
 		}
 		else {

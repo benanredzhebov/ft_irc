@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:44:33 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:26:20 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 #define ERR_INCORPASS(password) (":464 " + password + " :Password incorrect!" + CRLF)
 #define ERR_ALREADYREGISTERED(nickname) (":462 " + nickname + " :You may not reregister!" + CRLF)
 #define ERR_NICKNAME_NEEDED(command) (":420 " + command + ":pass NICK first" + CRLF)
+#define ERR_UNKNOWNCOMMAND(command) (":" + std::string("server") + " 421 " + command + " :Unknown command\r\n")
 
 // Status Messages
 #define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n ...continue with nick and username\n"

@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/07 09:27:00 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:31:41 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,8 @@ void Server::handleClientInput(Client* client) {
 		else if(splited_cmd[0] == "QUIT") {
 			QUIT(client, splited_cmd);
 		}
+	}
+	else {
+		sendResponse(ERR_UNKNOWNCOMMAND(splited_cmd[0]), client->getFd());
 	}
 }
