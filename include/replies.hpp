@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 11:26:20 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/08 09:29:19 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,15 @@
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
 #define CHANTOPIC(client_nick, channel, topic) (": " + client_nick + "!" + client_nick + "@hostname TOPIC " + channel + " " + topic + CRLF)
 
+#define ADCHANGE(admin_nick, channel, new_admin) \
+    (std::string(RED) + admin_nick + ": WE HAVE JUST ONE PARACHUTE LEFT ON BOARD, sorry guys\nJUMPS OFF 🤸 \n" + \
+    RESET + "ADMIN: " + admin_nick + " ABANDONED YOU GUYS\nWE NEED A NEW CAPTAIN\n" + \
+    YEL + new_admin + "@hostname has accepted the position and is here to serve CHANNEL: " + channel + CRLF RESET)
+
+	
+#define CLIOUT(cli_nick, channel) (RED ": " + cli_nick + "! @hostname LEFT CHANNEL: " + channel + CRLF RESET)
+#define CLIKICKOUT(hostname, cli_nick, channel, reason)(RED ": " + hostname + "@localhost KICKED " + cli_nick + " OUT OF CHANNEL: " + channel + "\n REASON:" + reason + CRLF RESET)
+
 // Errors
 #define ERR_NOSUCHCHANNEL(client_nick, channel) (":403 " + client_nick + " " + channel + " :No such channel" + CRLF)
 #define ERR_CHANNELNOTFOUND(nickname, channelname) (":403 " + nickname + " " + channelname + " :No such channel" + CRLF)
@@ -43,7 +52,7 @@
 #define ERR_KEYSET(channelname) (":467 " + channelname + " Channel key already set." + CRLF)
 #define ERR_NEEDMODEPARM(channelname, mode) (":696 " + channelname + " * You must specify a parameter for the key mode." + mode + CRLF)
 #define ERR_NOSUCHNICK(sender_nick, target_nick) (":401 " + sender_nick + " " + target_nick + " :No such nick/channel" + CRLF)
-#define ERR_UNKNOWNMODE(nickname, channelname, mode) (":472 " + nickname + " #" + channelname + " " + mode + " :is not a recognized channel mode" + CRLF)
+#define ERR_UNKNOWNMODE(nickname, channelname, mode) (":472 " + nickname + channelname + " " + mode + " :is not a recognized channel mode" + CRLF)
 #define ERR_INVALIDMODEPARM(channelname, mode) (":696 " + channelname + " Invalid mode parameter." + mode + CRLF)
 #define ERR_BADCHANNELKEY(client_nick, channel) (":475 " + client_nick + " " + channel + " :Cannot join channel (+k) - bad key" + CRLF)
 #define ERR_TOOMANYCHANNELS(client_nick) (":405 " + client_nick + " :You have joined too many channels" + CRLF)

@@ -6,7 +6,7 @@
 /*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:07:37 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:08:29 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,10 @@ int		Channel::remove_client(int fd) {
 int		Channel::remove_admin(int fd) {
     for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end();) {
         if (it->getFd() == fd) {
+			std::string admin_nick = it->getNickName();
 			_admins.erase(it);
 			if (_admins.empty() && !_clients.empty()) {
+				sendTo_all(ADCHANGE(admin_nick, getName(), _clients.front().getNickName()));
 				change_clientssToAdmin(_clients.front().getNickName());
 			}
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/07 11:31:41 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/08 09:28:46 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ void	Server::removeClientfromChannel(Client *cli) {
 		if (_channels[i].remove_admin(cli->getFd())){
 			continue ;
 		}
-		_channels[i].remove_client(cli->getFd());
+		if (_channels[i].remove_client(cli->getFd())){
+			_channels[i].sendTo_all(CLIOUT(cli->getNickName(), _channels[i].getName()));
+		}
 	}
 }
 
@@ -90,7 +92,7 @@ std::string Server::concatenateVector(std::vector<std::string>::const_iterator b
 	for (std::vector<std::string>::const_iterator it = begin; it != end; ++it) {
         if (!result.empty()) {
             result += " ";
-        }
+    git     }
         result += *it;
     }
     return result;
