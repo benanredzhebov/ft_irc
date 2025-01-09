@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/08 09:28:46 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/08 09:36:59 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
 }
 
 void Server::removeClientInstance(int fd) {
-    if (epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0) == -1) {
+	if (epoll_ctl(epfd, EPOLL_CTL_DEL, fd, 0) == -1) {
  	   std::cerr << "Failed to remove fd " << fd << " from epoll: " << strerror(errno) << std::endl;
 	}
-    for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ) {
-        if (it->getFd() == fd) {
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ) {
+		if (it->getFd() == fd) {
 			close_fds(fd);
-            it = _clients.erase(it);
+			it = _clients.erase(it);
 			return ;
-        } else {
-            ++it;
-        }
-    }
+		} else {
+			++it;
+		}
+	}
 }
 
 void		Server::sendAllClient(std::string message) {
@@ -77,25 +77,25 @@ int	Server::resizeFds() {
 }
 
 std::string Server::concatenateVector(const std::vector<std::string> &splited_cmd) {
-    std::string result;
-    for (size_t i = 0; i < splited_cmd.size(); ++i) {
-        if (!result.empty()) {
-            result += " ";
-        }
-        result += splited_cmd[i];
-    }
-    return result;
+	std::string result;
+	for (size_t i = 0; i < splited_cmd.size(); ++i) {
+		if (!result.empty()) {
+			result += " ";
+		}
+		result += splited_cmd[i];
+	}
+	return result;
 }
 
 std::string Server::concatenateVector(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end) {
-    std::string result;
+	std::string result;
 	for (std::vector<std::string>::const_iterator it = begin; it != end; ++it) {
-        if (!result.empty()) {
-            result += " ";
-    git     }
-        result += *it;
-    }
-    return result;
+		if (!result.empty()) {
+			result += " ";
+		}
+		result += *it;
+	}
+	return result;
 }
 
 void Server::handleClientInput(Client* client) {

@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/08 09:31:42 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/08 09:33:27 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ class Server {
 	
 		/*	CMD	*/
 		void			QUIT(Client *client, const std::vector<std::string>& splited_cmd);
-		void			sendQuitMessage(Client *client, const std::string& message);
-		
 		void			KICK(std::string cmd, int fd); // Handle KICK command
 		int				PRIVMSG(std::vector<std::string> splited_cmd, Client *client);
 		std::string 	composeMessage(int fd, const std::string &command, const std::string &message, const std::string &target);
@@ -118,6 +116,7 @@ class Server {
 		void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
 
 		/*	CMD_UTILS	*/
+		void			sendQuitMessage(Client *client, const std::string& message);
 		std::string 	concatenateVector(const std::vector<std::string> &splited_cmd);
 		std::string 	concatenateVector(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end);
 		int				splitJoin(std::vector<std::pair<std::string, std::string> > &token,
