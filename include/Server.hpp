@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/08 09:33:27 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:43:44 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ class Server {
 		std::string 	composeMessage(int fd, const std::string &command, const std::string &message, const std::string &target);
 		int				JOIN(std::vector<std::string> splited_cmd, Client *client);
 		void			INVITE(std::vector<std::string> splited_cmd, Client *client);
-		void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
+		// void			TOPIC(std::vector<std::string> splited_cmd, Client *client);
+		void 			TOPIC(std::string& cmd, int fd);
 
 		/*	CMD_UTILS	*/
 		void			sendQuitMessage(Client *client, const std::string& message);

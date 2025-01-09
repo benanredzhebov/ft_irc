@@ -9,10 +9,10 @@ class Client;
 class Channel {
 	private:
 		int									_invit_only;
-		int									_topic;
 		int									_key;
 		int									_limit;
 		bool								_topic_restriction;
+		std::string							_topic;
 		std::string							_name;
 		std::string							_time_creation;
 		std::string							_password;
@@ -32,7 +32,7 @@ class Channel {
 
 		/*SETTERS*/
 		void		setInvitOnly(int invit_only);
-		void		setTopic(int topic);
+		void		setTopic(std::string topic);
 		void		setKey(int key);
 		void		setLimit(int limit);
 		void		setTopicName(std::string topic_name);
@@ -48,16 +48,16 @@ class Channel {
 		/*GETTERS*/
 		int			getAdminSize();
 		int			getInvitOnly();
-		int			getTopic();
 		int			getKey();
 		int			getLimit();
 		int			getClientsNumber();
 		bool		gettopic_restriction() const;
 		bool		getModeAtindex(size_t index);
-		bool		clientInChannel(std::string &nick);
+		bool		clientInChannel(const std::string &nick);
 		Client		*get_client(int fd);
 		Client		*get_admin(int fd);
 		Client		*getClientInChannel(std::string name);
+		std::string	getTopic();
 		std::string	getTopicName();
 		std::string	GetPassword();
 		std::string	getName();

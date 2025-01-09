@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/08 09:29:19 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:36:22 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE " + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_JOINMSG(hostname, ipaddress, channelname) (":" + hostname + "@" + ipaddress + " JOIN " + channelname + CRLF)
 #define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ " + channelname + " :" + clientslist + CRLF)
-#define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " " + channelname + " :" + topic + CRLF)
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " " + channelname + " :END of /NAMES list" + CRLF)
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
 #define CHANTOPIC(client_nick, channel, topic) (": " + client_nick + "!" + client_nick + "@hostname TOPIC " + channel + " " + topic + CRLF)
+#define RPL_TOPIC(nick, channel, topic) (":" + std::string("server") + " 332 " + nick + " " + channel + " " + topic + "\r\n")
+#define RPL_NOTOPIC(nick, channel) (":" + std::string("server") + " 331 " + nick + " " + channel + " :No topic is set\r\n")
 
 #define ADCHANGE(admin_nick, channel, new_admin) \
     (std::string(RED) + admin_nick + ": WE HAVE JUST ONE PARACHUTE LEFT ON BOARD, sorry guys\nJUMPS OFF 🤸 \n" + \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 10:42:10 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:43:47 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, in
 			RPL_ENDOFNAMES(getClient(fd)->getNickName(),_channels[j].getName()),fd);
 	else
 		sendResponse(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first) + \
-			RPL_TOPICIS(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].getTopicName()) + \
+			RPL_TOPIC(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].getTopicName()) + \
 			RPL_NAMREPLY(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].clientChannel_list()) + \
 			RPL_ENDOFNAMES(getClient(fd)->getNickName(),_channels[j].getName()),fd);
     _channels[j].sendTo_all(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first), fd);

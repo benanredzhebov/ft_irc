@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 10:08:29 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:37:08 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Channel::Channel() {
 	this->_invit_only = 0;
-	this->_topic = 0;
+	this->_topic = "";
 	this->_key = 0;
 	this->_limit = 0;
 	this->_topic_restriction = false;
@@ -60,7 +60,7 @@ Channel &Channel::operator=(const Channel &other) {
 
 /*SETTERS*/
 void	Channel::setInvitOnly(int invit_only) {this->_invit_only = invit_only;}
-void	Channel::setTopic(int topic) {this->_topic = topic;}
+void	Channel::setTopic(std::string topic) {this->_topic = topic;}
 void	Channel::setKey(int key) {this->_key = key;}
 void	Channel::setLimit(int limit) {this->_limit = limit;}
 void	Channel::setTopicName(std::string topic_name) {this->_topic_name = topic_name;}
@@ -83,7 +83,7 @@ void	Channel::set_createiontime() {
 int			Channel::getAdminSize() {return this->_admins.size();}
 
 int			Channel::getInvitOnly() {return this->_invit_only;}
-int			Channel::getTopic() {return this->_topic;}
+std::string	Channel::getTopic() {return this->_topic;}
 int			Channel::getKey() {return this->_key;}
 int			Channel::getLimit() {return this->_limit;}
 int			Channel::getClientsNumber() {return this->_clients.size() + this->_admins.size();}
@@ -92,7 +92,7 @@ bool		Channel::getModeAtindex(size_t index) {return _modes[index].second;}
 
 
 // It checks if a client with a given nickname is present in the channel
-bool		Channel::clientInChannel(std::string &nick) {
+bool		Channel::clientInChannel(const std::string &nick) {
 	for (size_t i = 0; i < _clients.size(); i++) {
 		if (_clients[i].getNickName() == nick)
 			return true;

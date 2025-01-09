@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/08 09:36:59 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:34:29 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,8 @@ void Server::handleClientInput(Client* client) {
 			INVITE(splited_cmd, client);
 		}
 		else if(splited_cmd[0] == "TOPIC"){
-			TOPIC(splited_cmd, client);
+			std::string	temp = concatenateVector(splited_cmd);
+			TOPIC(temp, client->getFd());
 		}
 		else if(splited_cmd[0] == "MODE"){
 			std::string	temp = concatenateVector(splited_cmd);

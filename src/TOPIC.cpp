@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 14:32:22 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/01 02:52:15 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:54:39 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,37 +31,61 @@ std::string getColonMessage(int x, std::vector<std::string> str) {
 	return (temp);
 }
 
-void	Server::TOPIC(std::vector<std::string> splited_cmd, Client *client){
-	if(splited_cmd.size() < 2) { 
-		sendResponse(ERR_NOTENOUGHPARAM(splited_cmd[0]) , client->getFd());
+void Server::TOPIC(std::string& cmd, int fd) {
+	std::string channelName;
+	std::string topic;
+	Channel* channel;
+	Client* cli = getClient(fd);
+
+	if (!cli) {
+		std::cerr << "Error: Client not found for fd: " << fd << std::endl;
 		return;
 	}
-	if(splited_cmd[1][0] != '#' || !getChannel(splited_cmd[1])) {
-		sendResponse(ERR_NOSUCHCHANNEL(client->getNickName(), splited_cmd[1]) , client->getFd());
-		return;
-	}
-	// here should ensure that client is either on the channel , admin or everyine can send
-	// both should be combined as one if !admnin || !open to everyone(clients in the channel) .
-	if (!(getChannel(splited_cmd[1])->get_admin(client->getFd())))	{
-		sendResponse(ERR_NOTONCHANNEL(client->getNickName(), splited_cmd[1]) , client->getFd());
-		return;
-	}
-	Channel *channel;
-	channel = getChannel(splited_cmd[1]);
-	
-	if (splited_cmd.size() == 2 && splited_cmd[1][0] == '#') {
-		sendResponse(channel->getTopicName(), client->getFd());
-		return ;
-	}
+
+	size_t found = cmd.find_first_not_of("TOPICtopic \t\b");
+	if (found != std::string::npos)
+		cmd = cmd.substr(found);
 	else {
-		std::string topic = getColonMessage(2, splited_cmd);
-		channel->setTopicName(topic);
-		if (channel->checkClientExistence(client->getFd())) {
-			channel->sendTo_all(CHANTOPIC(client->getNickName(), splited_cmd[1], channel->getTopicName()), client->getFd());
-		}
+		sendResponse(ERR_NEEDMOREPARAMS(std::string("*")), cli->getFd());
+		return;
 	}
-	return ;
+	
+	std::stringstream ss(cmd);
+	ss >> channelName;
+	size_t colonPos = cmd.find(':');
+	
+	if (colonPos != std::string::npos) 
+		topic = cmd.substr(colonPos + 1);
+
+	if (!topic.empty() && topic[0] == ' ')
+		topic = topic.substr(1);
+
+	if (channelName.empty() || channelName[0] != '#' || !(channel = getChannel(channelName))) {
+		sendResponse(ERR_NOSUCHCHANNEL(cli->getNickName(), channelName), fd);
+		return;
+	}
+
+	if (!channel->clientInChannel(cli->getNickName())) {
+		sendResponse(ERR_NOTONCHANNEL(cli->getNickName(), channelName), fd);
+		return;
+	}
+
+	if (topic.empty()) {
+		// Get the topic
+		std::string currentTopic = channel->getTopic();
+		if (currentTopic.empty()) {
+			sendResponse(RPL_NOTOPIC(cli->getNickName(), channelName), fd);
+		} else {
+			sendResponse(RPL_TOPIC(cli->getNickName(), channelName, currentTopic), fd);
+		}
+	} else {
+		// Set the topic
+		if (channel->getModeAtindex(1) && !channel->get_admin(fd)) {
+			sendResponse(ERR_CHANOPRIVSNEEDED(cli->getNickName(), channelName), fd);
+			return;
+		}
+		channel->setTopic(topic);
+		sendResponse(RPL_TOPIC(cli->getNickName(), channelName, topic), fd);
+		channel->sendTo_all(":" + cli->getNickName() + " TOPIC " + channelName + " " + topic + "\r\n");
+	}
 }
-
-
-
