@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/09 12:43:44 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/10 09:39:04 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class Server {
 		std::vector<Channel>				_channels;
 		std::vector<Client>					_clients;
 		std::vector<struct epoll_event>		_fds;
+		
 	public:
 		Server(int port, const std::string& password);
 		~Server();

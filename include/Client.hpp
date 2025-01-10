@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:02:57 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 10:36:49 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:14:52 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ class Client {
 		std::string					_buffer;
 		std::string					_ipadd;
 		std::vector<Channel>		_channels;
-		// std::vector<std::string>	_channelIsInvite;
 	
 	public:
 		Client();
@@ -49,10 +48,8 @@ class Client {
 	bool			nickGet();
 	std::string		getNickName();
 	std::string		getUserName();
-	std::string		getIpAdd();
+	std::string		getIpAdd() const;
 	std::string		getHostname();
-	// bool			getInviteChannel(std::string &chName);
-
 
 	/*SETTERS*/
 	void			setUserstate(bool value);
@@ -62,7 +59,7 @@ class Client {
 	void			setRegistered(bool value);
 	void			setClientFd(int fd);
 	void			setLogedIn(bool value);
-	void			setIpAdd(std::string ipadd);
+	void			setIpAdd(const std::string ipadd);
 
 	/* METHODS */
 	void			decrementPasswordTrials();

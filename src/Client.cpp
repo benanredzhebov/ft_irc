@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 10:36:27 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/10 09:47:41 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool			Client::getRegistered() { return this->_registered; }
 bool			Client::getLogedIn() { return this->_logedin; }
 std::string		Client::getNickName() { return this->_nickname; }
 std::string		Client::getUserName() { return this->_username; }
-std::string		Client::getIpAdd() { return _ipadd; }
+std::string		Client::getIpAdd() const { return this->_ipadd; }
 
 std::string		Client::getHostname() {
     std::string hostname = this->getNickName() + "!" + this->getUserName();
@@ -104,7 +104,7 @@ void		Client::setRegistered(bool value) { this->_registered = value; }
 void		Client::setNickName(std::string &nickname) { this->_nickname = nickname; }
 void		Client::setUsername(std::string &username) { this->_username = username; }
 void		Client::setLogedIn(bool value) { this->_logedin = value; }
-void		Client::setIpAdd(std::string ipadd) { this->_ipadd = ipadd; }
+void		Client::setIpAdd(const std::string ipadd) { this->_ipadd = ipadd; }
 void		Client::setClientFd(int fd) { _fd = fd; }
 void		Client::nickSet(bool value) { _nickbool = value; }
 

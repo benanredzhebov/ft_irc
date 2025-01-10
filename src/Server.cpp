@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 08:42:25 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/10 09:57:53 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	Server::_serverAcceptIncoming(){
 	clientAddrLen = sizeof(clientAddr);
 	clientFd = accept(_server_fdsocket, (struct sockaddr *) &clientAddr, &clientAddrLen);
 	if (clientFd  < 0) {
-		std::cerr << "accepting client faliled\n" << std::endl;
+		std::cerr << "accepting client failed\n" << std::endl;
 		close_fds(clientFd);
 		return (-1);
 	}
@@ -104,8 +104,21 @@ int Server::_run_server() {
             		std::cerr << "Failed to add client to epoll\n";
             		continue;
 				}
+
+				// Retrieve the client's address information
+				struct sockaddr_in6 cliaddr;
+				socklen_t cliaddr_len = sizeof(cliaddr);
+				if (getpeername(clientFD, (struct sockaddr*)&cliaddr, &cliaddr_len) == -1) {
+					std::cerr << "Failed to get client address\n";
+					close_fds(clientFD);
+					continue;
+				}
+				
 				Client newclient;
 				newclient.setClientFd(clientFD);
+				char	ipStr[INET6_ADDRSTRLEN];
+				inet_ntop(AF_INET6, &cliaddr.sin6_addr, ipStr, sizeof(ipStr));
+				newclient.setIpAdd(ipStr);
 				_clients.push_back(newclient);
 			}
 			else {

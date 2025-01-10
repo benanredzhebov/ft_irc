@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: danevans <danevans@student.42.fr>          +#+  +:+       +#+         #
+#    By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/15 09:58:47 by beredzhe          #+#    #+#              #
-#    Updated: 2024/12/22 13:12:36 by danevans         ###   ########.fr        #
+#    Updated: 2025/01/10 09:11:52 by beredzhe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,10 @@ NAME        =   ircserv
 
 SRC_PATH    =   src/
 OBJ_PATH    =   obj/
+CMND_PATH	=   command/
 
-SRC         =   $(shell find $(SRC_PATH) -name '*.cpp')
-OBJ         =   $(patsubst $(SRC_PATH)%.cpp, $(OBJ_PATH)%.o, $(SRC))
+SRC         =   $(shell find $(SRC_PATH) $(CMND_PATH) -name '*.cpp')
+OBJ         =   $(patsubst $(SRC_PATH)%.cpp, $(OBJ_PATH)%.o, $(patsubst $(CMND_PATH)%.cpp, $(OBJ_PATH)%.o, $(SRC)))
 
 CC          =   c++
 CFLAGS      =   -std=c++98
@@ -28,6 +29,10 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
+	@mkdir -p $(OBJ_PATH)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJ_PATH)%.o: $(CMND_PATH)%.cpp
 	@mkdir -p $(OBJ_PATH)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
