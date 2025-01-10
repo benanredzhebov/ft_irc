@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 09:57:53 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:59:52 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ int	Server::_serverAcceptIncoming(){
 		close_fds(clientFd);
 		return (-1);
 	}
+	
+	if (DEBUG) {
+		char ipStr[INET6_ADDRSTRLEN];
+		inet_ntop(AF_INET6, &clientAddr.sin6_addr, ipStr, sizeof(ipStr));
+		std::cout << "Debug: New connection attempt from " << ipStr << std::endl;
+	}
+
 	return (clientFd);
 }
 
@@ -120,6 +127,10 @@ int Server::_run_server() {
 				inet_ntop(AF_INET6, &cliaddr.sin6_addr, ipStr, sizeof(ipStr));
 				newclient.setIpAdd(ipStr);
 				_clients.push_back(newclient);
+
+				// Debug information
+				if (DEBUG)
+					std::cout << "Debug: New client connected from " << ipStr << std::endl;
 			}
 			else {
 				Client *cli = getClient(clientFD);
