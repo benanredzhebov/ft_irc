@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 16:10:23 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/11 09:44:48 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,9 @@ int	Server::searchForClients(std::string nickname)
 	return count;
 }
 
+/*process message that have been buffered for a client.When a client has been suspended 
+and messages sent to the client have been stored in a queue. When the client resumes, the function
+deliveres those buffered messages*/
 void Server::processBufferedMessages(Client* client) {
 	while (!client->isMessageQueueEmpty()) {
 		std::string message = client->getNextMessageFromQueue();
