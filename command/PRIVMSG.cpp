@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/07 10:24:32 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/11 08:42:18 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,6 @@ int	splitPrivMsg_utils(std::vector<std::pair<std::string, std::string> > &token,
 	return (1);
 }
 
-// std::string composeMessage(const std::string &command, const std::string &message,
-// 							const std::string &nick, const std::string &target) {
-// 	std::string temp;
-
-// 	temp = ":" + nick + "!" + nick + "@localhost " + command + " " + target + " :" + message + "\n";
-// 	// temp = ":" + client->getNickName() + "!~" + client->getUserName() + "@localhost " + command + " " + target + " :" + message + "\r\n";
-// 	return (temp);
-// }
-
 std::string Server::composeMessage(int fd, const std::string &command, const std::string &message, const std::string &target) {
     std::string temp;
     Client* client = getClient(fd); // Use getClient to retrieve the Client object
@@ -90,17 +81,21 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 	}
 	for (size_t i = 0; i < token.size(); ++i) {
 		tmp = token[i].first;
-		// std::string message = composeMessage(splited_cmd[0], token[i].second,
-		// 								client->getNickName(), tmp);
 		std::string message = composeMessage(client->getFd(), splited_cmd[0], token[i].second, tmp);
 		if (tmp[i] == '#') {
 			Channel	*channel;
 			channel = getChannel(tmp);
-			if (client) {
+			if (channel) {
 				//for some reasons unkown admin or owner fd is not in the channel ?
 				if (channel->checkClientExistence(client->getFd())) {
 					channel->sendTo_all(message, client->getFd());
 				}
+				else {
+					sendResponse(ERR_NOTONCHANNEL(client->getNickName(), tmp), client->getFd());
+				}
+			}
+			else {
+				sendResponse(ERR_NOSUCHCHANNEL(client->getNickName(), tmp), client->getFd());
 			}
 		} else {
 			newClient = getClientNick(tmp);

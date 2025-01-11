@@ -6,11 +6,12 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 10:59:52 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:10:23 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
+
 
 /*Used to listen for incoming connections from clients*/
 int Server::_creatingServerSocketFd(){
@@ -33,7 +34,7 @@ int Server::_serverReservePortandIpBind(){
 	if (setsockopt(_server_fdsocket, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt)) < 0) {
 		std::cerr << "Failed to set IPV6_V6ONLY option: " << strerror(errno) << std::endl;
 		return (0);
-    }
+	}
 	if (bind(_server_fdsocket, (const struct sockaddr *)&address, sizeof(address)) < 0){
 		return (std::cout << "binding failed\n" << std::endl, 0);
 	}
@@ -108,8 +109,8 @@ int Server::_run_server() {
 				client_event = initEpollEvant(EPOLLIN, clientFD);
 				if (epoll_ctl(epfd, EPOLL_CTL_ADD, clientFD, &client_event) == -1) {
 					close_fds(clientFD);
-            		std::cerr << "Failed to add client to epoll\n";
-            		continue;
+					std::cerr << "Failed to add client to epoll\n";
+					continue;
 				}
 
 				// Retrieve the client's address information
@@ -154,4 +155,12 @@ int	Server::searchForClients(std::string nickname)
 			count++;
 	}
 	return count;
+}
+
+void Server::processBufferedMessages(Client* client) {
+	while (!client->isMessageQueueEmpty()) {
+		std::string message = client->getNextMessageFromQueue();
+		std::vector<std::string> splited_cmd = split(message, ' ');
+		handleClientInput(client);
+	}
 }

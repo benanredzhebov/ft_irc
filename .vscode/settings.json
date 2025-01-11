@@ -71,5 +71,6 @@
 	"typeinfo": "cpp",
 	"semaphore": "cpp",
 	"keeper": "cpp"
-}
+},
+"C_Cpp.errorSquiggles": "disabled"
 }

@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/09 11:34:29 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/11 08:20:55 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ std::string Server::concatenateVector(std::vector<std::string>::const_iterator b
 
 void Server::handleClientInput(Client* client) {
 	std::vector<std::string>	splited_cmd;
+
 	splited_cmd = spliting_cmd(client);
 
 	std::cout << YEL << "Input: " << concatenateVector(splited_cmd) << RESET << std::endl;
@@ -112,6 +113,11 @@ void Server::handleClientInput(Client* client) {
 		removeClientInstance(client->getFd());
 		return ;
 	}
+	if (client->isSuspended()) {
+		client->addMessageToQueue(concatenateVector(splited_cmd));
+		return ;
+	}
+	
 	if(splited_cmd[0] == "PASS")
 		clientPasswordVerify(client, splited_cmd);
 	else if (splited_cmd[0] == "NICK")

@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 09:39:04 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:10:02 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,18 @@ class Server {
 		bool			userNameInUse(std::string &username);
 		bool			is_validNickname(std::string &nickname);
 		bool			is_validUserName(std::string &username);
+		
+		/**/
+		void			processBufferedMessages(Client* client);
+		std::vector<std::string> split(const std::string& str, char delimiter) {
+			std::vector<std::string> tokens;
+			std::string token;
+			std::istringstream tokenStream(str);
+			while (std::getline(tokenStream, token, delimiter)) {
+				tokens.push_back(token);
+			}
+			return tokens;
+		}
 };
 
 /*	helper functions used	*/

@@ -6,29 +6,30 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 09:47:41 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/11 07:02:51 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Client.hpp"
 
 Client::Client()
-    : _fd(-1), 
-      _registered(false), 
-      _nickbool(false), 
-      _logedin(false), 
-      _passwordTrials(3),
-      _isOperator(false),
+	: _fd(-1), 
+	  _registered(false), 
+	  _nickbool(false), 
+	  _logedin(false), 
+	  _passwordTrials(3),
+	  _isOperator(false),
 	  _usernameState(false),
-      _nickname(""), 
-      _username(""),
+	  _suspended(false),
+	  _nickname(""), 
+	  _username(""),
 	  _channels(),
-	//   _channelIsInvite(),
-      _ipadd("") {
+	  _messageQueue(),
+	  _ipadd("") {
 }
 
 Client::Client(const Client& other) 
-    :	_fd(other._fd),
+	:	_fd(other._fd),
 		_passwordTrials(other._passwordTrials),
 		_registered(other._registered),
 		_logedin(other._logedin),
@@ -39,27 +40,29 @@ Client::Client(const Client& other)
 		_usernameState(other._usernameState),
 		_ipadd(other._ipadd),
 		_nickbool(other._nickbool),
-		_channels(other._channels)
-    //   _channelIsInvite(other._channelIsInvite) 
+		_channels(other._channels),
+		_suspended(other._suspended),
+		_messageQueue(other._messageQueue)
 	{}
 
 Client& Client::operator=(const Client& other) {
-    if (this != &other) {
-        this->_fd = other._fd;
-        this->_passwordTrials = other._passwordTrials;
-        this->_registered = other._registered;
-        this->_logedin = other._logedin;
-        this->_isOperator = other._isOperator;
-        this->_passwordVerified = other._passwordVerified;
-        this->_username = other._username;
-        this->_nickname = other._nickname;
-        this->_usernameState = other._usernameState;
-        this->_ipadd = other._ipadd;
-        this->_nickbool = other._nickbool;
-        this->_channels = other._channels;
-        // this->_channelIsInvite = other._channelIsInvite;
-    }
-    return *this;
+	if (this != &other) {
+		this->_fd = other._fd;
+		this->_passwordTrials = other._passwordTrials;
+		this->_registered = other._registered;
+		this->_logedin = other._logedin;
+		this->_isOperator = other._isOperator;
+		this->_passwordVerified = other._passwordVerified;
+		this->_username = other._username;
+		this->_nickname = other._nickname;
+		this->_usernameState = other._usernameState;
+		this->_ipadd = other._ipadd;
+		this->_nickbool = other._nickbool;
+		this->_channels = other._channels;
+		this->_suspended = other._suspended;
+		this->_messageQueue = other._messageQueue;
+	}
+	return *this;
 }
 
 Client::~Client(){}
@@ -76,23 +79,12 @@ std::string		Client::getUserName() { return this->_username; }
 std::string		Client::getIpAdd() const { return this->_ipadd; }
 
 std::string		Client::getHostname() {
-    std::string hostname = this->getNickName() + "!" + this->getUserName();
-    return hostname;
+	std::string hostname = this->getNickName() + "!" + this->getUserName();
+	return hostname;
 }
 
-int				Client::getChannelSize() const { return _channels.size(); }
-
-// bool			Client::getInviteChannel(std::string &chName) {
-//     for (size_t i = 0; i < this->_channelIsInvite.size(); i++) {
-//         if (this->_channelIsInvite[i] == chName)
-//             return true;
-//     }
-//     return false;
-// }
-
+int			Client::getChannelSize() const { return _channels.size(); }
 bool		Client::nickGet() {return this->_nickbool;}
-void		Client::decrementPasswordTrials() { _passwordTrials--; }
-int 		Client::getPasswordTrials() const { return _passwordTrials; }
 
 
 /*SETTERS*/
@@ -119,3 +111,21 @@ void		Client::deleteClientfromChannels() {
 		_channels[i].remove_admin(_fd);
 	}
 }
+
+/*METHODS*/
+int			Client::getPasswordTrials() const { return _passwordTrials; }
+void		Client::decrementPasswordTrials() { _passwordTrials--; }
+void		Client::addMessageToQueue(const std::string& message) {_messageQueue.push(message);}
+
+// retrieves and removes the next message from the client's message queue
+std::string	Client::getNextMessageFromQueue() {
+	if (_messageQueue.empty())
+		return "";
+	std::string	message = _messageQueue.front();
+	_messageQueue.pop();
+	return message;
+}
+
+bool		Client::isMessageQueueEmpty() const {return _messageQueue.empty();}
+void		Client::setSuspended(bool value) {_suspended = value;}
+bool		Client::isSuspended() const {return _suspended;}
