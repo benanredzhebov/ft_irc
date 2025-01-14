@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/14 09:12:45 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/14 08:28:54 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@
 #define ERR_INCORPASS(password) (":464 " + password + " :Password incorrect!" + CRLF)
 #define ERR_ALREADYREGISTERED(nickname) (":462 " + nickname + " :You may not reregister!" + CRLF)
 #define ERR_NICKNAME_NEEDED(command) (":420 " + command + ":pass NICK first" + CRLF)
-#define ERR_UNKNOWNCOMMAND(command) (":" + std::string("server") + " 421 " + command + " :Unknown command\r\n")
-
+#define ERR_UNKNOWNCOMMAND(command) (":" + std::string("server") + " 421 " + command + " :Unknown command.Benan\r\n")
 
 // Status Messages
 #define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n ...continue with nick and username\n"

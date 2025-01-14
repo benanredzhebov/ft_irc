@@ -10,7 +10,7 @@
 
 # Configuration
 SERVER="localhost"
-PORT=6667
+PORT=6666
 PASSWORD="pass"
 # Lists of possible values
 NICKS=("Dani" "Beni" "Dori" "Defi")

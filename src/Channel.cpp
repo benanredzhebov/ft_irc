@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/09 11:37:08 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/14 10:55:16 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,8 @@ int		Channel::remove_client(int fd) {
 }
 
 int		Channel::remove_admin(int fd) {
-    for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end();) {
-        if (it->getFd() == fd) {
+	for (std::vector<Client>::iterator it = _admins.begin(); it != _admins.end();) {
+		if (it->getFd() == fd) {
 			std::string admin_nick = it->getNickName();
 			_admins.erase(it);
 			if (_admins.empty() && !_clients.empty()) {

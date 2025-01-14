@@ -70,7 +70,8 @@
 	"cinttypes": "cpp",
 	"typeinfo": "cpp",
 	"semaphore": "cpp",
-	"keeper": "cpp"
+	"keeper": "cpp",
+	"map": "cpp"
 },
 "C_Cpp.errorSquiggles": "disabled"
 }
