@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 16:10:02 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:57:54 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <ctime>
+#include <map>
 
 #include "./Client.hpp"
 #include "./Channel.hpp"
@@ -42,7 +43,7 @@
 #define GRE "\e[1;32m"
 #define YEL "\e[1;33m"
 #define RESET "\e[0m"
-#define DEBUG 0
+#define DEBUG 1
 
 
 class Client;
@@ -90,7 +91,7 @@ class Server {
 		int				_run_server();
 		int				_serverAcceptIncoming();
 		int				_setServerSocket();
-		epoll_event		initEpollEvant(int poll_mode, int fd);
+		epoll_event		initEpollEvent(int poll_mode, int fd);
 		
 		
 		/*MODE CMD*/
@@ -158,6 +159,6 @@ class Server {
 std::string					toUpper(const std::string& str);
 std::string					trim(const std::string& str);
 std::string					getColonMessage(int x, std::vector<std::string> str);
-std::vector<std::string>	spliting_cmd(Client *cli);
+std::vector<std::string>	spliting_cmd(Server *server, Client *cli);
 
 #endif

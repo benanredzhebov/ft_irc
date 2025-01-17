@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/14 11:54:11 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:48:12 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	Server::close_fds(int fd) {
 	}
 }
 
-epoll_event	Server::initEpollEvant(int poll_mode, int fd) {
+epoll_event	Server::initEpollEvent(int poll_mode, int fd) {
 	epoll_event	events;
 	events.data.fd = fd;
 	events.events = poll_mode;
@@ -61,7 +61,7 @@ void	Server::removeClientfromChannel(Client *cli) {
 int	Server::_setServerSocket() {
 	if (!_createBindListen())
 		return (close_fds(_server_fdsocket), 0);
-	server_event = initEpollEvant(EPOLLIN, _server_fdsocket);
+	server_event = initEpollEvent(EPOLLIN, _server_fdsocket);
 	if (epoll_ctl(epfd, EPOLL_CTL_ADD, _server_fdsocket, &server_event) == -1)
 		return (0);
 	return (1);
@@ -160,10 +160,10 @@ std::string Server::concatenateVector(std::vector<std::string>::const_iterator b
 // }
 
 void Server::handleClientInput(Client* client) {
+	std::vector<std::string> commands = spliting_cmd(this, client);
+
 	if (!client)
 		return;
-
-	std::vector<std::string> commands = spliting_cmd(client);
 
 	if (commands.empty()) {
 		std::cout << RED << "Client fd [" << client->getFd() << "] disconnected" << RESET << std::endl;
@@ -174,12 +174,11 @@ void Server::handleClientInput(Client* client) {
 
 	for (std::vector<std::string>::iterator it = commands.begin(); it != commands.end(); ++it) {
 		std::vector<std::string> splited_cmd = split(*it, ' ');
-
+		
 		std::cout << YEL << "Input: " << *it << RESET << std::endl;
 
 		if (splited_cmd.empty())
 			continue;
-
 		if (splited_cmd[0] == "PASS") {
 			clientPasswordVerify(client, splited_cmd);
 		}

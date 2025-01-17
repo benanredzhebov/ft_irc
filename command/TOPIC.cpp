@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 14:32:22 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/10 15:58:49 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/15 10:38:05 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void Server::TOPIC(std::string& cmd, int fd) {
 	if (found != std::string::npos)
 		cmd = cmd.substr(found);
 	else {
-		sendResponse(ERR_NEEDMOREPARAMS(std::string("*")), cli->getFd());
+		sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), cli->getFd());
 		return;
 	}
 	

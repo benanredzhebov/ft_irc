@@ -32,7 +32,7 @@ simulate_client() {
         done
         sleep 0.5
         echo "QUIT :Goodbye from $NICK"
-    } | nc $SERVER $PORT
+    } | nc -C $SERVER $PORT
 }
 
 # Simulate multiple clients

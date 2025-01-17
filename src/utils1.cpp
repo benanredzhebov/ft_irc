@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/14 12:21:02 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:37:01 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,12 @@ std::string toUpper(const std::string& str) {
 // 	return (vec);
 // }
 
-std::vector<std::string> spliting_cmd(Client *cli) {
-	Server *server;
+std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 	char buffer[1024] = {0};
 	size_t bytes;
 	std::vector<std::string> vec;
 	// std::string temp_buffer;
-	static std::map<int, std::string>	temp_buffers; // Use a map to store buffers for each client
+	static std::map<int, std::string>	temp_buffers; // map to store buffers for each client
 
 	while (true) {
 		bytes = recv(cli->getFd(), buffer, sizeof(buffer) - 1, 0);
@@ -112,5 +111,13 @@ std::vector<std::string> spliting_cmd(Client *cli) {
 	}
 	// temp_buffer.clear();
 	temp_buffers[cli->getFd()].clear();
+	std::cout << "Enter: [";
+	for (size_t i = 0; i < vec.size(); ++i) {
+		std::cout << vec[i];
+		if (i < vec.size() - 1) {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "]" << std::endl;
 	return vec;
 }

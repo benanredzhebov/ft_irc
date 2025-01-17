@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 02:47:17 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/11 08:42:18 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/15 10:37:58 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	Server::PRIVMSG(std::vector<std::string> splited_cmd, Client *client) {
 	Client *newClient;
 
 	if (!splitPrivMsg_utils(token, splited_cmd)) {
-		sendResponse(ERR_NEEDMOREPARAMS(splited_cmd[0]), client->getFd());
+		sendResponse(ERR_NOTENOUGHPARAM(splited_cmd[0]), client->getFd());
 		return (0);
 	}
 	for (size_t i = 0; i < token.size(); ++i) {

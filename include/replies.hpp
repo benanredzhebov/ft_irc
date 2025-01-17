@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/14 09:12:45 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/15 10:38:12 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@
 #define ERR_CHANOPRIVSNEEDED(client_nick, channel) (":482 " + client_nick + " " + channel + " :You're not channel operator" + CRLF)
 #define ERR_USERONCHANNEL(client_nick, channel, inviter) (":443 " + inviter + " " + client_nick + " " + channel + " :is already on channel" + CRLF)
 #define ERR_NOTENOUGHPARAM(nickname) (":461 " + nickname + " :Not enough parameters." + CRLF)
-#define ERR_NEEDMOREPARAMS(command) (":461 " + command + " :Not enough parameters" + CRLF)
+// #define ERR_NEEDMOREPARAMS(command) (":461 " + command + " :Not enough parameters" + CRLF)
 #define ERR_INCORPASS(password) (":464 " + password + " :Password incorrect!" + CRLF)
 #define ERR_ALREADYREGISTERED(nickname) (":462 " + nickname + " :You may not reregister!" + CRLF)
 #define ERR_NICKNAME_NEEDED(command) (":420 " + command + ":pass NICK first" + CRLF)

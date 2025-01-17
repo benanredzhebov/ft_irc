@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:36:20 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/11 09:44:48 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:03:57 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int Server::_run_server() {
 				if (clientFD < 0){
 					continue ;
 				}
-				client_event = initEpollEvant(EPOLLIN, clientFD);
+				client_event = initEpollEvent(EPOLLIN, clientFD);
 				if (epoll_ctl(epfd, EPOLL_CTL_ADD, clientFD, &client_event) == -1) {
 					close_fds(clientFD);
 					std::cerr << "Failed to add client to epoll\n";

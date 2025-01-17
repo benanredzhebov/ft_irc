@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/10 09:52:47 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/15 10:37:50 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {
 	std::vector<std::pair<std::string, std::string> > token;
 
 	if (!splitJoin(token, splited_cmd)) {
-		sendResponse(ERR_NEEDMOREPARAMS(splited_cmd[0]), client->getFd());
+		sendResponse(ERR_NOTENOUGHPARAM(splited_cmd[0]), client->getFd());
 		return (0);
 	}
 	if (DEBUG) {

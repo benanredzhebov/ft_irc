@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:17:13 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/11 07:02:51 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:19:23 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ Client::Client()
 	  _username(""),
 	  _channels(),
 	  _messageQueue(),
-	  _ipadd("") {
-}
+	  _ipadd("") {}
 
 Client::Client(const Client& other) 
 	:	_fd(other._fd),

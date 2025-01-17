@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:09:32 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/05 23:40:18 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:07:39 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ bool Server::_signal = false;
 void Server::signalHandler(int signum)
 {
 	(void)signum;
+	std::cout << std::endl << "Signal Received!" << std::endl;
 	Server::_signal = true;
 }
