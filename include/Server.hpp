@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/16 13:57:54 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:03:31 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 #define GRE "\e[1;32m"
 #define YEL "\e[1;33m"
 #define RESET "\e[0m"
-#define DEBUG 1
+#define DEBUG 0
 
 
 class Client;

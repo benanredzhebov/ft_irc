@@ -6,20 +6,20 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 12:58:48 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/15 10:37:50 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:39:17 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Server.hpp"
 
 int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token, 
-                      const std::vector<std::string> splited_cmd) {
-    std::vector<std::string> channels;
-    std::vector<std::string> passwords;
-    std::vector<std::string> uniqueChannels;
-    std::string channelStr, passwordStr;
+					  const std::vector<std::string> splited_cmd) {
+	std::vector<std::string> channels;
+	std::vector<std::string> passwords;
+	std::vector<std::string> uniqueChannels;
+	std::string channelStr, passwordStr;
 
-    for (size_t i = 1; i < splited_cmd.size(); ++i) {
+	for (size_t i = 1; i < splited_cmd.size(); ++i) {
 		std::string part = splited_cmd[i];
 		if ((part[0] == '#' || part[0] == '&')) {
 			channelStr = part;
@@ -39,17 +39,17 @@ int Server::splitJoin(std::vector<std::pair<std::string, std::string> > &token,
 		}
 	}
 		if (channels.empty() || passwords.size() > channels.size()) {
-		    std::cout << "Place holder here Error: No valid channels found.\n";
-		    return (0);
+			std::cout << "Place holder here Error: No valid channels found.\n";
+			return (0);
 		}
 		for (size_t i = 0; i < channels.size(); ++i) {
-		    if (i >= passwords.size()) {
-		        passwordStr = "";
-		    } else {
-		        passwordStr = passwords[i];
-		    }		
-		    token.push_back(std::make_pair(channels[i], passwordStr));
-		}		
+			if (i >= passwords.size()) {
+				passwordStr = "";
+			} else {
+				passwordStr = passwords[i];
+			}		
+			token.push_back(std::make_pair(channels[i], passwordStr));
+		}
 		return (1); 
 }
 
@@ -102,7 +102,7 @@ void Server::existCh(std::vector<std::pair<std::string, std::string> >&token, in
 			RPL_TOPIC(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].getTopicName()) + \
 			RPL_NAMREPLY(getClient(fd)->getNickName(),_channels[j].getName(),_channels[j].clientChannel_list()) + \
 			RPL_ENDOFNAMES(getClient(fd)->getNickName(),_channels[j].getName()),fd);
-    _channels[j].sendTo_all(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first), fd);
+	_channels[j].sendTo_all(RPL_JOINMSG(getClient(fd)->getHostname(),getClient(fd)->getIpAdd(),token[i].first), fd);
 }
 
 void Server::newChannelCreate(std::string chName, std::string chPass, Client *client)
@@ -118,9 +118,9 @@ void Server::newChannelCreate(std::string chName, std::string chPass, Client *cl
 	newChannel.add_admin(*client);
 	newChannel.set_createiontime(); //what was this ever used for ???
 	_channels.push_back(newChannel);
-    sendResponse(RPL_JOINMSG(client->getHostname(), client->getIpAdd(), chName), client->getFd());
-    sendResponse(RPL_NAMREPLY(client->getNickName(), chName, newChannel.clientChannel_list()), client->getFd());
-    sendResponse(RPL_ENDOFNAMES(client->getNickName(), chName), client->getFd());
+	sendResponse(RPL_JOINMSG(client->getHostname(), client->getIpAdd(), chName), client->getFd());
+	sendResponse(RPL_NAMREPLY(client->getNickName(), chName, newChannel.clientChannel_list()), client->getFd());
+	sendResponse(RPL_ENDOFNAMES(client->getNickName(), chName), client->getFd());
 }
 
 int	Server::JOIN(std::vector<std::string> splited_cmd, Client *client) {

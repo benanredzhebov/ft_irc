@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/17 13:51:44 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:01:14 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 		}
 	}
 	temp_buffers[cli->getFd()].clear();
+	return vec;
 }
