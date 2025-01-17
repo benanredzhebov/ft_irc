@@ -6,7 +6,7 @@
 /*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/17 09:37:01 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:51:44 by beredzhe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,46 +35,10 @@ std::string toUpper(const std::string& str) {
 	return result;
 }
 
-// std::vector<std::string>	spliting_cmd(Client *cli) {
-// 	char						buffer[1024] = {0};
-// 	size_t						bytes;
-// 	std::vector<std::string>	vec;
-// 	std::string					cleaned_buffer;
-// 	std::string					temp_buffer;
-
-// 	while (true) {	
-// 		bytes = recv(cli->getFd(), buffer, sizeof(buffer) - 1, 0);
-// 		if (bytes <= 0) {
-// 			return vec;
-// 		}
-// 		buffer[bytes] = '\0';
-// 		if (buffer[0] == '\n')
-// 			continue ;
-// 		temp_buffer.append(buffer);
-// 		if (temp_buffer.find('\n') != std::string::npos)
-// 			break ;
-// 	}
-// 	if (!temp_buffer.empty() && temp_buffer[temp_buffer.size() - 1] == '\n') {
-// 		temp_buffer.erase(temp_buffer.size() - 1, 1);
-// 	}
-// 	cleaned_buffer = trim(std::string(temp_buffer));
-// 	std::istringstream	stm(cleaned_buffer);
-// 	std::string	token;
-// 	while (stm >> token) { 
-// 		vec.push_back(token);
-// 		token.clear();
-// 	}
-// 	if (!vec.empty()) {
-// 		vec[0] = toUpper(vec[0]);
-// 	}
-// 	return (vec);
-// }
-
 std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 	char buffer[1024] = {0};
 	size_t bytes;
 	std::vector<std::string> vec;
-	// std::string temp_buffer;
 	static std::map<int, std::string>	temp_buffers; // map to store buffers for each client
 
 	while (true) {
@@ -83,15 +47,13 @@ std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 			return vec;
 		}
 		buffer[bytes] = '\0';
-		// temp_buffer.append(buffer);
+		if (buffer[0] == '\n')
+			continue;
 		temp_buffers[cli->getFd()].append(buffer);
-		// if (temp_buffer.find('\n') != std::string::npos)
-		// 	break;
 		if (temp_buffers[cli->getFd()].find('\n') != std::string::npos)
 			break;
 	}
 
-	// std::istringstream stream(temp_buffer);
 	std::istringstream stream(temp_buffers[cli->getFd()]);
 	std::string command;
 	while (std::getline(stream, command, '\n')) {
@@ -109,15 +71,5 @@ std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 			vec.push_back(server->concatenateVector(splited_cmd));
 		}
 	}
-	// temp_buffer.clear();
 	temp_buffers[cli->getFd()].clear();
-	std::cout << "Enter: [";
-	for (size_t i = 0; i < vec.size(); ++i) {
-		std::cout << vec[i];
-		if (i < vec.size() - 1) {
-			std::cout << ", ";
-		}
-	}
-	std::cout << "]" << std::endl;
-	return vec;
 }
