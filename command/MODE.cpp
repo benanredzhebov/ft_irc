@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 09:02:29 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/06 11:37:24 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:33:30 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,12 @@ void	Server::MODE(std::string& cmd, int fd) {
 	}
 	
 	getCmdArgs(cmd, channelName, modeset, params);
-	std::cout << "cmd = " << cmd << std::endl;
-	std::cout << "chnnlname = " << channelName << std::endl;
-	std::cout << "modeset = " << modeset << std::endl;
-	std::cout << "params = " << params << std::endl;
+	if (DEBUG) {
+		std::cout << "cmd = " << cmd << std::endl;
+		std::cout << "chnnlname = " << channelName << std::endl;
+		std::cout << "modeset = " << modeset << std::endl;
+		std::cout << "params = " << params << std::endl; 
+	}
 	std::vector<std::string>	tokens = splitParams(params);
 	if (channelName.empty() || channelName[0] != '#' || !(channel = getChannel(channelName))) {
 		sendResponse(ERR_CHANNELNOTFOUND(cli->getUserName(), channelName), fd);

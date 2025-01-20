@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:02 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/15 10:38:12 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:59:46 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*These lines is a preprocessor macro definitions in C++. It defines a macro named*/
-
-#define once
 
 #define CRLF "\r\n"
 
@@ -34,14 +32,13 @@
     RESET + "ADMIN: " + admin_nick + " ABANDONED YOU GUYS\nWE NEED A NEW CAPTAIN\n" + \
     YEL + new_admin + "@hostname has accepted the position and is here to serve CHANNEL: " + channel + CRLF RESET)
 
-	
 #define CLIOUT(cli_nick, channel) (RED ": " + cli_nick + "! @hostname LEFT CHANNEL: " + channel + CRLF RESET)
-#define CLIKICKOUT(hostname, cli_nick, channel, reason)(RED ": " + hostname + "@localhost KICKED " + cli_nick + " OUT OF CHANNEL: " + channel + "\n REASON:" + reason + CRLF RESET)
+#define CLIKICKOUT(hostname, cli_nick, channel, reason) \
+    (RED ": " + hostname + "@localhost KICKED " + cli_nick + " OUT OF CHANNEL: " + channel + "\n REASON:" + reason + CRLF RESET)
 
 // Errors
 #define ERR_NOSUCHCHANNEL(client_nick, channel) (":403 " + client_nick + " " + channel + " :No such channel" + CRLF)
 #define ERR_CHANNELNOTFOUND(nickname, channelname) (":403 " + nickname + " " + channelname + " :No such channel" + CRLF)
-
 #define ERR_NORECIPIENT(nick) (":" + nick + " 411 :No recipient given (PRIVMSG)" + CRLF)
 #define ERR_NOTEXTTOSEND(nick) (":" + nick + " 412 :No text to send" + CRLF)
 #define ERR_TOOMANYTARGETS(nick) (":" + nick + " 407 :Too many recipients" + CRLF)
@@ -65,15 +62,15 @@
 #define ERR_CHANOPRIVSNEEDED(client_nick, channel) (":482 " + client_nick + " " + channel + " :You're not channel operator" + CRLF)
 #define ERR_USERONCHANNEL(client_nick, channel, inviter) (":443 " + inviter + " " + client_nick + " " + channel + " :is already on channel" + CRLF)
 #define ERR_NOTENOUGHPARAM(nickname) (":461 " + nickname + " :Not enough parameters." + CRLF)
-// #define ERR_NEEDMOREPARAMS(command) (":461 " + command + " :Not enough parameters" + CRLF)
+#define ERR_NEEDMOREPARAMS(command) (":461 " + command + " :Not enough parameters" + CRLF)
 #define ERR_INCORPASS(password) (":464 " + password + " :Password incorrect!" + CRLF)
 #define ERR_ALREADYREGISTERED(nickname) (":462 " + nickname + " :You may not reregister!" + CRLF)
 #define ERR_NICKNAME_NEEDED(command) (":420 " + command + ":pass NICK first" + CRLF)
 #define ERR_UNKNOWNCOMMAND(command) (":" + std::string("server") + " 421 " + command + " :Unknown command\r\n")
-
 
 // Status Messages
 #define G_PASSWORD "✅✅ PASSWORD CORRECT ✅✅\n ...continue with nick and username\n"
 #define PASSWORD_AUTH_FAILED "PASSWORD FAILED BYE 👋\n"
 #define USER_SET "😎😎 CLIENT USERNAME SET 😎😎\n"
 #define NICK_SET "😎😎 CLIENT NICKNAME SET 😎😎\n"
+

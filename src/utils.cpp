@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 22:26:59 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/17 14:06:45 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:26:44 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void		Server::sendAllClient(std::string message) {
 	}
 }
 
-//need to change the duplicate method i have in remove_admin (std::string &nick)
 void	Server::removeClientfromChannel(Client *cli) {
 	for (int i = 0; i < _channels.size(); i++) {
 		if (_channels[i].remove_admin(cli->getFd())){
@@ -98,70 +97,8 @@ std::string Server::concatenateVector(std::vector<std::string>::const_iterator b
 	return result;
 }
 
-// void Server::handleClientInput(Client* client) {
-// 	std::vector<std::string>	splited_cmd;
-
-// 	splited_cmd = spliting_cmd(client);
-
-// 	std::cout << YEL << "Input: " << concatenateVector(splited_cmd) << RESET << std::endl;
-
-// 	if (!client)
-// 		return ;
-// 	if (splited_cmd.empty()) {
-// 		std::cout << RED << "Client fd [" << client->getFd() << "] disconnected" << RESET << std::endl;
-// 		removeClientfromChannel(client);
-// 		removeClientInstance(client->getFd());
-// 		return ;
-// 	}
-// 	if (client->isSuspended()) {
-// 		client->addMessageToQueue(concatenateVector(splited_cmd));
-// 		return ;
-// 	}
-// 	if(splited_cmd[0] == "PASS"){
-// 		clientPasswordVerify(client, splited_cmd);
-// 	}
-// 	else if (splited_cmd[0] == "NICK"){
-// 		clientNickName(client, splited_cmd);
-// 	}
-// 	else if (splited_cmd[0] == "USER"){
-// 		clientUserName(client, splited_cmd);
-// 	}
-// 	else if (client->getLogedIn()) {
-// 		if(splited_cmd[0] == "JOIN"){
-// 			JOIN(splited_cmd, client);
-// 		}
-// 		else if(splited_cmd[0] == "PRIVMSG") {
-// 			PRIVMSG(splited_cmd, client);
-// 		}
-// 		else if(splited_cmd[0] == "KICK") {
-// 			std::string temp = concatenateVector(splited_cmd);
-// 			KICK(temp, client->getFd());
-// 		}
-// 		else if(splited_cmd[0] == "INVITE") {
-// 			INVITE(splited_cmd, client);
-// 		}
-// 		else if(splited_cmd[0] == "TOPIC"){
-// 			std::string	temp = concatenateVector(splited_cmd);
-// 			TOPIC(temp, client->getFd());
-// 		}
-// 		else if(splited_cmd[0] == "MODE"){
-// 			std::string	temp = concatenateVector(splited_cmd);
-// 			MODE(temp, client->getFd());
-// 		}
-// 		else if(splited_cmd[0] == "QUIT") {
-// 			QUIT(client, splited_cmd);
-// 		}
-// 		else
-// 			sendResponse(ERR_UNKNOWNCOMMAND(splited_cmd[0]), client->getFd());
-// 	}
-// 	else {
-// 		sendResponse(ERR_UNKNOWNCOMMAND(splited_cmd[0]), client->getFd());
-// 	}
-// }
-
 void Server::handleClientInput(Client* client) {
 	std::vector<std::string> commands = spliting_cmd(this, client);
-
 	if (!client)
 		return;
 

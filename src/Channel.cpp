@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:04:19 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/14 10:55:16 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:39:35 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,6 @@ void	Channel::add_client(Client newClient) {_clients.push_back(newClient);}
 
 void	Channel::add_admin(Client newClient) {
 	_admins.push_back(newClient);
-	// add_client(newClient);
 }
 
 int		Channel::remove_client(int fd) {
@@ -208,6 +207,12 @@ int		Channel::remove_admin(int fd) {
 			if (_admins.empty() && !_clients.empty()) {
 				sendTo_all(ADCHANGE(admin_nick, getName(), _clients.front().getNickName()));
 				change_clientssToAdmin(_clients.front().getNickName());
+			}
+			if (_admins.empty() && _clients.empty()) {
+				if (GetPassword() != ""){
+					setModeAtindex(2, false);
+					setPassword("");
+				}
 			}
 			return (1);
 		} else {

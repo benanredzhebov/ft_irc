@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:39:45 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/17 14:03:31 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:15:58 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ class Server {
 		Server &operator=(const Server &other);
 
 		static bool	isBotfull;
-		// void			addClient(Client newClient);
 		int				resizeFds();
 		void			sendAllClient(std::string message);
 		Client			*getClient(int fd);

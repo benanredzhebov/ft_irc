@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 21:30:29 by danevans          #+#    #+#             */
-/*   Updated: 2025/01/17 14:01:14 by beredzhe         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:06:56 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ std::string toUpper(const std::string& str) {
 
 std::vector<std::string> spliting_cmd(Server *server, Client *cli) {
 	char buffer[1024] = {0};
-	size_t bytes;
+	int bytes;
 	std::vector<std::string> vec;
 	static std::map<int, std::string>	temp_buffers; // map to store buffers for each client
 

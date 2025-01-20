@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beredzhe <beredzhe@student.42.fr>          +#+  +:+       +#+         #
+#    By: danevans <danevans@student.42.f>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/15 09:58:47 by beredzhe          #+#    #+#              #
-#    Updated: 2025/01/10 09:11:52 by beredzhe         ###   ########.fr        #
+#    Updated: 2025/01/20 13:05:32 by danevans         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,5 +43,8 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
+
+leaks: re 
+	valgrind --leak-check=full ./ircserv 8080 pass
 
 .PHONY: all clean fclean re

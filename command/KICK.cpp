@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danevans <danevans@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danevans <danevans@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:00:59 by beredzhe          #+#    #+#             */
-/*   Updated: 2025/01/07 10:22:49 by danevans         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:32:25 by danevans         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,11 @@ std::string Server::splitCmdKick(std::string cmd, std::vector<std::string> &tmp,
 		else str1 += str[i];
 	}
 	tmp.push_back(str1);
-	for (size_t i = 0; i < tmp.size(); i++)//erase the empty strings
+	for (size_t i = 0; i < tmp.size(); i++)
 		{if (tmp[i].empty())tmp.erase(tmp.begin() + i--);}
 	if (reason[0] == ':') reason.erase(reason.begin());
-	else //shrink to the first space
+	else 
 		{for (size_t i = 0; i < reason.size(); i++){if (reason[i] == ' '){reason = reason.substr(0, i);break;}}}
-	// for (size_t i = 0; i < tmp.size(); i++){// erase the '#' from the channel name and check if the channel valid
-	// 		if (*(tmp[i].begin()) == '#')
-	// 			tmp[i].erase(tmp[i].begin());
-	// 		else {
-	// 			std::cout << "from here or where\n";
-	// 			sendResponse(ERR_NOSUCHCHANNEL(getClient(fd)->getNickName(), tmp[i]) , fd);
-	// 			tmp.erase(tmp.begin() + i--);
-	// 		}
-	// 	}
 	return reason;
 }
 

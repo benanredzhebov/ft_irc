@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SERVER="localhost"
-PORT=6666
+PORT=8080
 PASSWORD="pass"
 CHANNEL="#test"
 
