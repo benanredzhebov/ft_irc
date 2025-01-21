@@ -9,7 +9,7 @@
   - [Installation](#Installation)
   - [Usage](#usage)
 - [Commands](#commands)
-- [Technical Details](#TechnicalDetails)
+- [Technical Details](#technicaldetails)
 - [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
 
