@@ -108,15 +108,15 @@ For a full list of commands and their syntax, refer to the [IRC RFC documentatio
 
 - # Sockets:
 
- - The server uses epoll() to handle multiple clients.
+  - The server uses epoll() to handle multiple clients.
 
 - # Multithreading:
 
- - Threads are used to manage incoming connections and message parsing.
+  - Threads are used to manage incoming connections and message parsing.
 
 - # Data Structures:
 
- - Users and channels are managed using STL containers like std::map and std::vector.
+  - Users and channels are managed using STL containers like std::map and std::vector.
 
 - # Protocol Implementation:
 
