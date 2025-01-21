@@ -5,11 +5,11 @@
 - [Introduction](#introduction)
 - [Project Overview](#projectoverview)
 - [Features](#features)
-- [Getting Started](#getting started)
+- [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Usage](#usage)
 - [Commands](#commands)
-- [Technical Details](#technicaldetails)
+- [Technical Details](#technical-details)
 - [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
 
