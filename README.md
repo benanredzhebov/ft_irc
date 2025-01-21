@@ -75,11 +75,12 @@ manage users and channels according to the IRC protocol specifications.
 
 # Usage
 1. Start the server:
+
   <span style="color:blue"> ./ircserv <port> <password> </span>
     - <port>: The port number the server will listen on.
     - <password>: The password clients must use to connect to the server.
 
-2. Connect to the server using an IRC client (e.g., HexChat, irssi, or nc for testing):
+3. Connect to the server using an IRC client (e.g., HexChat, irssi, or nc for testing):
   <span style="color:blue"> /server <host> <port> -p <password> </span>
 
 
