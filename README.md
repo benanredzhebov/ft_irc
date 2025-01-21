@@ -5,7 +5,7 @@
 - [Introduction](#introduction)
 - [Project Overview](#projectoverview)
 - [Features](#features)
-- [Getting Started](#gettingstarted)
+- [Getting Started](#getting started)
   - [Installation](#installation)
   - [Usage](#usage)
 - [Commands](#commands)
@@ -64,7 +64,7 @@ manage users and channels according to the IRC protocol specifications.
 
 ## Getting Started
 
-# Instalation
+# Installation
 1. Clone the repository:
   `git@github.com:benanredzhebov/ft_irc.git`
   `cd ft_irc`
