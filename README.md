@@ -55,11 +55,11 @@ manage users and channels according to the IRC protocol specifications.
 
 - # User Authentication:
 
-  -Supports user registration and nickname management.
+  - Supports user registration and nickname management.
 
 - # Error Handling:
 
-  -Gracefully handles errors such as invalid commands or nickname conflicts.
+  - Gracefully handles errors such as invalid commands or nickname conflicts.
 
 
 ## Getting Started
