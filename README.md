@@ -67,12 +67,13 @@ manage users and channels according to the IRC protocol specifications.
 # Installation
 1. Clone the repository:
 
-  `git@github.com:benanredzhebov/ft_irc.git`
-  `cd ft_irc`
+  - `git@github.com:benanredzhebov/ft_irc.git`
+  
+  - `cd ft_irc`
 
 3. Build the project:
 
-  `make`
+  - `make`
 
 
 # Usage
@@ -84,7 +85,8 @@ manage users and channels according to the IRC protocol specifications.
     - `<password>`: The password clients must use to connect to the server.
 
 3. Connect to the server using an IRC client (e.g., HexChat, irssi, or nc for testing):
- `/server <host> <port> -p <password>`
+   
+ - `/server <host> <port> -p <password>`
 
 
 # Commands
