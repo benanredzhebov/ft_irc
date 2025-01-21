@@ -66,17 +66,20 @@ manage users and channels according to the IRC protocol specifications.
 
 # Installation
 1. Clone the repository:
+
   `git@github.com:benanredzhebov/ft_irc.git`
   `cd ft_irc`
 
-2. Build the project:
+3. Build the project:
+
   `make`
 
 
 # Usage
 1. Start the server:
 
-  `./ircserv <port> <password>`
+  - `./ircserv <port> <password>`.
+  
     - `<port>`: The port number the server will listen on.
     - `<password>`: The password clients must use to connect to the server.
 
