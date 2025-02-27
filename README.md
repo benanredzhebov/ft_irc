@@ -13,8 +13,6 @@
 - [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
 
-This project is a very small 2D Game. It is built to make you work with textures, sprites. And some very basic gameplay elements.
-
 # Satus:
 
 Result : 
